@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class JavaVsaMonolithSourcebaseApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JavaVsaMonolithSourcebaseApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(JavaVsaMonolithSourcebaseApplication.class, args);
+    }
 
 }

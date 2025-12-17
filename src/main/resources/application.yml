@@ -1,0 +1,62 @@
+spring:
+  application:
+    name: java-vsa-monolith-sourcebase
+  
+  # Database Configuration (Placeholder)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgresql
+    username: postgresql
+    password: zxcl123123
+    driver-class-name: org.postgresql.Driver
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: false
+
+  # Redis Configuration used by CacheConfig
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      database: 0
+      # password: your_redis_password
+
+  # Security Configuration (Resource Server)
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Point this to your Identity Provider (e.g. Keycloak, Auth0)
+          # issuer-uri: http://localhost:8080/realms/monolith-realm
+          # OR set jwk-set-uri
+          jwk-set-uri: http://localhost:8080/realms/monolith-realm/protocol/openid-connect/certs
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: your_email@gmail.com
+    password: your_app_password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+logging:
+  level:
+    root: INFO
+    com.vsa.monolith: DEBUG
+    
+server:
+  port: 8081
