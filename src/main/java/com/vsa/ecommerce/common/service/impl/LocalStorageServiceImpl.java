@@ -1,7 +1,7 @@
-package com.vsa.monolith.common.service.impl;
+package com.vsa.ecommerce.common.service.impl;
 
-import com.vsa.monolith.common.service.StorageService;
-import com.vsa.monolith.common.util.FileUtil;
+import com.vsa.ecommerce.common.service.StorageService;
+import com.vsa.ecommerce.common.util.FileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

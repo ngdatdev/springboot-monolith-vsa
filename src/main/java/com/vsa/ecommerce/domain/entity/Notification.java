@@ -1,6 +1,6 @@
-package com.vsa.monolith.domain.entity;
+package com.vsa.ecommerce.domain.entity;
 
-import com.vsa.monolith.domain.enums.NotificationStatus;
+import com.vsa.ecommerce.domain.enums.NotificationStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -22,7 +22,7 @@ public class Notification {
 
     /**
      * Ideally, this should just be an "orderId" string or long to decouple,
-     * but in a monolith, we often just directly reference the entity for convenience.
+     * but in a ecommerce, we often just directly reference the entity for convenience.
      */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")

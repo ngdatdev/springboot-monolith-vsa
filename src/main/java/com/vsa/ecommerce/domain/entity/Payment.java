@@ -1,6 +1,6 @@
-package com.vsa.monolith.domain.entity;
+package com.vsa.ecommerce.domain.entity;
 
-import com.vsa.monolith.domain.enums.PaymentStatus;
+import com.vsa.ecommerce.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

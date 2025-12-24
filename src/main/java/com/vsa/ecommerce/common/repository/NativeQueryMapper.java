@@ -1,6 +1,6 @@
-package com.vsa.monolith.common.repository;
+package com.vsa.ecommerce.common.repository;
 
-import com.vsa.monolith.common.util.JsonUtil;
+import com.vsa.ecommerce.common.util.JsonUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

@@ -1,4 +1,10 @@
 package com.vsa.ecommerce.common.abstraction;
 
-public class IService {
+/**
+ * Generic service interface defining the contract for business logic execution.
+ * @param <TRequest> The request type, extending IRequest.
+ * @param <TResponse> The response type, extending IResponse.
+ */
+public interface IService<TRequest extends IRequest, TResponse extends IResponse> {
+    TResponse execute(TRequest request);
 }

@@ -1,4 +1,4 @@
-package com.vsa.monolith.domain.enums;
+package com.vsa.ecommerce.domain.enums;
 
 public enum InventoryTransactionType {
     RESERVE,

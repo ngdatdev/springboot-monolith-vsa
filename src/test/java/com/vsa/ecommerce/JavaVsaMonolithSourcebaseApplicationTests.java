@@ -1,4 +1,4 @@
-package com.vsa.monolith;
+package com.vsa.ecommerce;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package com.vsa.monolith.common.util;
+package com.vsa.ecommerce.common.util;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

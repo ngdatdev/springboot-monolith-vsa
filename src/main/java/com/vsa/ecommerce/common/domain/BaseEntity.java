@@ -1,4 +1,4 @@
-package com.vsa.monolith.common.domain;
+package com.vsa.ecommerce.common.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,21 +1,25 @@
-package com.vsa.monolith.common.exception;
+package com.vsa.ecommerce.common.exception;
 
 import lombok.Getter;
 
+/**
+ * Custom runtime exception used to signal business logic failures.
+ * Carries a BusinessCode to provide context about the error.
+ */
 @Getter
 public class BusinessException extends RuntimeException {
-    private final Integer errorCode;
-    private final String errorMessage;
+    private final BusinessStatus status;
 
-    public BusinessException(String errorMessage) {
-        super(errorMessage);
-        this.errorCode = 400;
-        this.errorMessage = errorMessage;
+    public BusinessException(BusinessStatus status) {
+        super(status.getMessage());
+        this.status = status;
     }
 
-    public BusinessException(Integer errorCode, String errorMessage) {
-        super(errorMessage);
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
+    public BusinessException(BusinessStatus status, Object... args) {
+        super(String.format(status.getMessage(), args));
+        this.status = status; // Enum is constant, so we can't 'override' message in place easily without wrapper.
+        // NOTE: If we want dynamic message in Result, we rely on Exception message.
+        // Result.failure will likely use ex.getMessage() which is formatted.
     }
+
 }

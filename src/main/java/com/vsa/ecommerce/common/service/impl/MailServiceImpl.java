@@ -1,6 +1,6 @@
-package com.vsa.monolith.common.service.impl;
+package com.vsa.ecommerce.common.service.impl;
 
-import com.vsa.monolith.common.service.MailService;
+import com.vsa.ecommerce.common.service.MailService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

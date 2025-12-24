@@ -1,4 +1,4 @@
-package com.vsa.monolith.domain.entity;
+package com.vsa.ecommerce.domain.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;

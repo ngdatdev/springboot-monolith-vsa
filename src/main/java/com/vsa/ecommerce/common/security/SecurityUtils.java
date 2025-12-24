@@ -1,31 +1,48 @@
-package com.vsa.monolith.common.security;
+package com.vsa.ecommerce.common.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.jwt.Jwt;
 
 import java.util.Optional;
 
+/**
+ * Security utilities for accessing current authenticated user.
+ */
 public class SecurityUtils {
 
-    private SecurityUtils() {}
+    private SecurityUtils() {
+    }
 
     /**
-     * Get the login of the current user.
-     * Assumes JWT authentication where the "sub" claim is the username/ID.
+     * Get the current authenticated user's email.
      */
-    public static Optional<String> getCurrentUserLogin() {
+    public static Optional<String> getCurrentUserEmail() {
+        return getCurrentUserPrincipal()
+                .map(UserPrincipal::getEmail);
+    }
+
+    /**
+     * Get the current authenticated user's ID.
+     */
+    public static Optional<Long> getCurrentUserId() {
+        return getCurrentUserPrincipal()
+                .map(UserPrincipal::getId);
+    }
+
+    /**
+     * Get the current UserPrincipal.
+     */
+    public static Optional<UserPrincipal> getCurrentUserPrincipal() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
+
+        if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.empty();
         }
 
         Object principal = authentication.getPrincipal();
 
-        if (principal instanceof Jwt) {
-            return Optional.ofNullable(((Jwt) principal).getSubject());
-        } else if (principal instanceof String) {
-            return Optional.of((String) principal);
+        if (principal instanceof UserPrincipal) {
+            return Optional.of((UserPrincipal) principal);
         }
 
         return Optional.empty();
@@ -36,14 +53,26 @@ public class SecurityUtils {
      */
     public static boolean isAuthenticated() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return authentication != null && authentication.isAuthenticated();
+        return authentication != null
+                && authentication.isAuthenticated()
+                && !"anonymousUser".equals(authentication.getPrincipal());
     }
-    
-    public static String getCurrentUserToken() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.getPrincipal() instanceof Jwt) {
-            return ((Jwt) authentication.getPrincipal()).getTokenValue();
-        }
-        return null;
+
+    /**
+     * Check if current user has a specific role.
+     */
+    public static boolean hasRole(String role) {
+        return getCurrentUserPrincipal()
+                .map(user -> user.getRoleNames().contains(role))
+                .orElse(false);
+    }
+
+    /**
+     * Check if current user has a specific permission.
+     */
+    public static boolean hasPermission(String permission) {
+        return getCurrentUserPrincipal()
+                .map(user -> user.getPermissionNames().contains(permission))
+                .orElse(false);
     }
 }

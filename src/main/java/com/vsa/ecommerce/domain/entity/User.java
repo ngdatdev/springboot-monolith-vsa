@@ -1,11 +1,15 @@
-package com.vsa.monolith.domain.entity;
+package com.vsa.ecommerce.domain.entity;
 
-import com.vsa.monolith.common.domain.BaseEntity;
-import com.vsa.monolith.domain.enums.UserStatus;
+import com.vsa.ecommerce.domain.enums.UserStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Represents a customer in the system.
@@ -13,6 +17,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
 public class User {
 
     @Id
@@ -28,13 +34,43 @@ public class User {
     @Column(nullable = false)
     private String lastName;
 
+    /**
+     * BCrypt encoded password for authentication.
+     */
+    @Column(nullable = false)
+    private String password;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private UserStatus status;
 
     /**
+     * Many-to-many relationship with Role.
+     * A user can have multiple roles.
+     */
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
+
+    /**
+     * Spring Security UserDetails fields for account status.
+     */
+    @Column(nullable = false)
+    private Boolean accountNonExpired = true;
+
+    @Column(nullable = false)
+    private Boolean accountNonLocked = true;
+
+    @Column(nullable = false)
+    private Boolean credentialsNonExpired = true;
+
+    @Column(nullable = false)
+    private Boolean enabled = true;
+
+    /**
      * One user can place multiple orders.
-     * This field creates a bi-directional navigation which can be expensive if fetched eagerly.
+     * This field creates a bi-directional navigation which can be expensive if
+     * fetched eagerly.
      */
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Order> orders = new ArrayList<>();
@@ -49,7 +85,8 @@ public class User {
     @Version
     private Long version;
 
-    public User() {}
+    public User() {
+    }
 
     @PrePersist
     protected void onCreate() {

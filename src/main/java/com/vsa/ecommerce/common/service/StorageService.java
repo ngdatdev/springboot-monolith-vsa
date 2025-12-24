@@ -1,4 +1,4 @@
-package com.vsa.monolith.common.service;
+package com.vsa.ecommerce.common.service;
 
 import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;

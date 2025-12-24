@@ -1,6 +1,4 @@
-package com.vsa.monolith.common.service;
-
-import java.util.Map;
+package com.vsa.ecommerce.common.service;
 
 public interface MailService {
     void sendTextEmail(String to, String subject, String body);

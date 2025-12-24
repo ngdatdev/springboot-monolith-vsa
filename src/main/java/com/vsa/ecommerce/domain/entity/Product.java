@@ -1,4 +1,4 @@
-package com.vsa.monolith.domain.entity;
+package com.vsa.ecommerce.domain.entity;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 /**
  * Represents a product in the catalog.
- * In a real monolith, this is often tightly referenced by Orders and Inventory.
+ * In a real ecommerce, this is often tightly referenced by Orders and Inventory.
  */
 @Entity
 @Table(name = "products")

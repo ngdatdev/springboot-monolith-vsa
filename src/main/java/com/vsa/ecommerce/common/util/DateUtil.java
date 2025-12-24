@@ -1,4 +1,4 @@
-package com.vsa.monolith.common.util;
+package com.vsa.ecommerce.common.util;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

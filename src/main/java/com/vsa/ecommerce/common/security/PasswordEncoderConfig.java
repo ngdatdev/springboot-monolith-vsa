@@ -1,0 +1,19 @@
+package com.vsa.ecommerce.common.security;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+/**
+ * Password encoder configuration.
+ * Uses BCrypt with strength 12 for password hashing.
+ */
+@Configuration
+public class PasswordEncoderConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
+}

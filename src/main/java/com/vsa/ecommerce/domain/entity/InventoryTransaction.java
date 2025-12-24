@@ -1,6 +1,6 @@
-package com.vsa.monolith.domain.entity;
+package com.vsa.ecommerce.domain.entity;
 
-import com.vsa.monolith.domain.enums.InventoryTransactionType;
+import com.vsa.ecommerce.domain.enums.InventoryTransactionType;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
