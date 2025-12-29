@@ -12,9 +12,12 @@ import org.springframework.stereotype.Component;
  * Runs every day at 9:00 AM.
  * Cron: "0 0 9 * * ?"
  */
+import com.vsa.ecommerce.common.job.QuartzJob;
+
 @Slf4j
 @Component
 @DisallowConcurrentExecution
+@QuartzJob(cron = "0 0 9 * * ?", name = "DailySalesReportJob", description = "Sends daily sales report email at 9 AM")
 public class DailySalesReportJob extends BaseQuartzJob {
 
     // @Autowired

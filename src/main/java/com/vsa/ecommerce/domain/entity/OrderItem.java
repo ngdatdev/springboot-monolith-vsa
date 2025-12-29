@@ -1,11 +1,13 @@
 package com.vsa.ecommerce.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 /**
  * Represents a line item within an order.
- * Demonstrates the pattern of snapshotting data (price/name) vs referencing data (Product).
+ * Demonstrates the pattern of snapshotting data (price/name) vs referencing
+ * data (Product).
  */
 @Entity
 @Table(name = "order_items")
@@ -15,13 +17,15 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
     /**
      * Hard reference to Product.
-     * This is convenient in a ecommerce but painful when Product moves to a Catalog Service.
+     * This is convenient in a ecommerce but painful when Product moves to a Catalog
+     * Service.
      */
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
@@ -43,5 +47,6 @@ public class OrderItem {
     @Column(nullable = false)
     private Integer quantity;
 
-    public OrderItem() {}
+    public OrderItem() {
+    }
 }

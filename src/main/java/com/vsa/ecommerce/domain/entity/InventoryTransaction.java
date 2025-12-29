@@ -1,12 +1,14 @@
 package com.vsa.ecommerce.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vsa.ecommerce.domain.enums.InventoryTransactionType;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 /**
  * Immutable audit log of all inventory changes.
- * Cross-domain reference example: It links to both Inventory (Core) and Order (Sales).
+ * Cross-domain reference example: It links to both Inventory (Core) and Order
+ * (Sales).
  */
 @Entity
 @Table(name = "inventory_transactions")
@@ -16,6 +18,7 @@ public class InventoryTransaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "inventory_id", nullable = false)
     private Inventory inventory;
@@ -36,10 +39,7 @@ public class InventoryTransaction {
     @Column(nullable = false)
     private Integer quantityAfter;
 
-    /**
-     * Optional link to an Order if this change was triggered by a sale/refund.
-     * This creates a cross-domain dependency that is hard to untangle.
-     */
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order relatedOrder;
@@ -47,7 +47,8 @@ public class InventoryTransaction {
     @Column(nullable = false, updatable = false)
     private LocalDateTime timestamp;
 
-    public InventoryTransaction() {}
+    public InventoryTransaction() {
+    }
 
     @PrePersist
     protected void onCreate() {

@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.domain.config;
 
 import com.vsa.ecommerce.common.cache.CacheKeyConvention;
-import com.vsa.ecommerce.common.cache.hybrid.HybridCacheManager;
+import com.vsa.ecommerce.common.cache.hybrid.HybridCacheService;
 import com.vsa.ecommerce.common.lock.DistributedLockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ import static com.vsa.ecommerce.common.cache.CacheKeyConvention.RESOURCE_CONFIG;
 @RequiredArgsConstructor
 public class ConfigCacheService {
 
-    private final HybridCacheManager cacheManager;
+    private final HybridCacheService cacheManager;
     private final CacheKeyConvention keyConvention;
     private final DistributedLockService lockService;
     // Inject your ConfigRepository here

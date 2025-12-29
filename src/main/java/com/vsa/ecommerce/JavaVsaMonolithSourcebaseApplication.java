@@ -55,7 +55,6 @@ public class JavaVsaMonolithSourcebaseApplication {
                 protocol, serverPort, contextPath,
                 protocol, serverPort, contextPath);
 
-        // Log important endpoints
         log.info("\n----------------------------------------------------------\n" +
                 "Available API Endpoints:\n" +
                 "----------------------------------------------------------\n" +

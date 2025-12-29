@@ -1,5 +1,6 @@
 package com.vsa.ecommerce.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vsa.ecommerce.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -72,6 +73,7 @@ public class User {
      * This field creates a bi-directional navigation which can be expensive if
      * fetched eagerly.
      */
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Order> orders = new ArrayList<>();
 

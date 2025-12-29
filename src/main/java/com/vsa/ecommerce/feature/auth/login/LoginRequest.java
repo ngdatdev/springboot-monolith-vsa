@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.login;
 
-import com.vsa.ecommerce.common.abstraction.IRequest;
+import com.vsa.ecommerce.common.abstraction.Request;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class LoginRequest implements IRequest {
+public class LoginRequest implements Request {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")

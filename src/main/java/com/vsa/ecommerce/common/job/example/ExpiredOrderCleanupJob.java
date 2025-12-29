@@ -12,9 +12,12 @@ import org.springframework.stereotype.Component;
  * Runs every 30 minutes.
  * Cron: "0 0/30 * * * ?"
  */
+import com.vsa.ecommerce.common.job.QuartzJob;
+
 @Slf4j
 @Component
 @DisallowConcurrentExecution
+@QuartzJob(cron = "0 0/30 * * * ?", name = "ExpiredOrderCleanupJob", description = "Cancels orders pending for more than 24 hours every 30 minutes")
 public class ExpiredOrderCleanupJob extends BaseQuartzJob {
 
     // @Autowired

@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * </pre>
  */
 @Slf4j
-public class SnowflakeIdGenerator {
+public class SnowflakeIdGenerator implements IdGenerator {
 
     // ==================== Constants ====================
 

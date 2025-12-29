@@ -19,7 +19,7 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
  * - L1 Cache: Caffeine (in-memory, <1ms, 30s TTL) → CaffeineLocalCacheService
  * - L2 Cache: Redis (distributed, 5-10ms, 5min TTL) →
  * RedisDistributedCacheService
- * - Hybrid Cache: L1 + L2 coordination → HybridCacheManagerImpl
+ * - Hybrid Cache: L1 + L2 coordination → HybridCacheServiceImpl
  * - Pub/Sub: Multi-instance cache invalidation → CacheInvalidationSubscriber
  * <p>
  * Architecture:
@@ -53,13 +53,13 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
  * - L1 TTL (30s) MUST be shorter than L2 TTL (5min)
  * - Do NOT cache in Controllers or during transactions
  * - Only cache DTOs or immutable objects, never JPA entities
- * - Use HybridCacheManager in service layer, not Spring @Cacheable
+ * - Use HybridCacheService in service layer, not Spring @Cacheable
  */
 @Slf4j
 @Configuration
 @EnableCaching
 @RequiredArgsConstructor
-public class CacheConfig {
+public class HybridCacheConfig {
 
         private final CacheInvalidationSubscriber invalidationSubscriber;
 

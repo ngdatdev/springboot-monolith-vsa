@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class HybridCacheManagerImpl implements HybridCacheManager {
+public class HybridCacheServiceImpl implements HybridCacheService {
 
     private final LocalCacheService l1Cache;
     private final RedisCacheService l2Cache;

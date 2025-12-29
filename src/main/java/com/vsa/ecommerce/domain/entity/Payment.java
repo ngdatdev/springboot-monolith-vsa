@@ -1,5 +1,6 @@
 package com.vsa.ecommerce.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vsa.ecommerce.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -16,9 +17,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /**
-     * Tightly coupled to Order.
-     */
+    @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
@@ -39,7 +38,8 @@ public class Payment {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    public Payment() {}
+    public Payment() {
+    }
 
     @PrePersist
     protected void onCreate() {

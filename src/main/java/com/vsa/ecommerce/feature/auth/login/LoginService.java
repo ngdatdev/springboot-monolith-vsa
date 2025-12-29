@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.login;
 
-import com.vsa.ecommerce.common.abstraction.IService;
+import com.vsa.ecommerce.common.abstraction.Service;
 import com.vsa.ecommerce.common.security.UserPrincipal;
 import com.vsa.ecommerce.common.security.jwt.JwtProperties;
 import com.vsa.ecommerce.common.security.jwt.JwtTokenProvider;
@@ -10,15 +10,14 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
 
 /**
  * Authentication Service for login/logout operations.
  */
 @Slf4j
-@Service
+@org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class LoginService implements IService<LoginRequest, LoginResponse> {
+public class LoginService implements Service<LoginRequest, LoginResponse> {
 
         private final AuthenticationManager authenticationManager;
         private final JwtTokenProvider jwtTokenProvider;

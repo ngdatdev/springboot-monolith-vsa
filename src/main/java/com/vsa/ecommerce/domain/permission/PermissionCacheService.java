@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.domain.permission;
 
 import com.vsa.ecommerce.common.cache.CacheKeyConvention;
-import com.vsa.ecommerce.common.cache.hybrid.HybridCacheManager;
+import com.vsa.ecommerce.common.cache.hybrid.HybridCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,7 +32,7 @@ import static com.vsa.ecommerce.common.cache.CacheKeyConvention.RESOURCE_PERMISS
 @RequiredArgsConstructor
 public class PermissionCacheService {
 
-    private final HybridCacheManager cacheManager;
+    private final HybridCacheService cacheManager;
     private final CacheKeyConvention keyConvention;
     // Inject your PermissionRepository here
     // private final PermissionRepository permissionRepository;

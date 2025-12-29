@@ -11,6 +11,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.server.ServletServerHttpResponse;
 
 import java.util.Collections;
@@ -21,6 +22,7 @@ import java.util.Map;
  * the Result envelope.
  * Ensures unified response format across the application.
  */
+@Slf4j
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ResponseAdvice implements ResponseBodyAdvice<Object> {
@@ -29,8 +31,30 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(MethodParameter returnType, Class<? extends HttpMessageConverter<?>> converterType) {
-        // Apply to all responses by default, or filter by package/annotation if needed
-        return true;
+        try {
+            if (returnType.getDeclaringClass() == null) {
+                return false;
+            }
+
+            // Check if the controller class or method is annotated with @IgnoreResult
+            if (returnType.getDeclaringClass().isAnnotationPresent(IgnoreResult.class) ||
+                    returnType.hasMethodAnnotation(IgnoreResult.class)) {
+                return false;
+            }
+
+            // Only wrap responses from our base package
+            String packageName = returnType.getDeclaringClass().getPackageName();
+            boolean support = packageName.startsWith("com.vsa.ecommerce");
+
+            if (support) {
+                log.debug("Wrapping response for: {}.{}", returnType.getDeclaringClass().getSimpleName(),
+                        returnType.getMethod().getName());
+            }
+            return support;
+        } catch (Exception e) {
+            log.error("Error in ResponseAdvice.supports: ", e);
+            return false;
+        }
     }
 
     @Override
@@ -39,7 +63,7 @@ public class ResponseAdvice implements ResponseBodyAdvice<Object> {
             Class<? extends HttpMessageConverter<?>> selectedConverterType,
             ServerHttpRequest request, ServerHttpResponse response) {
 
-        if (body instanceof Result) {
+        if (body instanceof Result || body == null) {
             return body;
         }
 

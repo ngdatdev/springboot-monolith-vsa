@@ -15,9 +15,12 @@ import org.springframework.stereotype.Component;
  * @DisallowConcurrentExecution prevents multiple instances running
  *                              simultaneously
  */
+import com.vsa.ecommerce.common.job.QuartzJob;
+
 @Slf4j
 @Component
 @DisallowConcurrentExecution
+@QuartzJob(cron = "0 0 * * * ?", name = "CacheCleanupJob", description = "Cleans up expired cache entries hourly")
 public class CacheCleanupJob extends BaseQuartzJob {
 
     @Override

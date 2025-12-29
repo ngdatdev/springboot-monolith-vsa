@@ -1,5 +1,6 @@
 package com.vsa.ecommerce.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vsa.ecommerce.domain.enums.NotificationStatus;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -16,14 +17,17 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User recipient;
 
     /**
      * Ideally, this should just be an "orderId" string or long to decouple,
-     * but in a ecommerce, we often just directly reference the entity for convenience.
+     * but in a ecommerce, we often just directly reference the entity for
+     * convenience.
      */
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order relatedOrder;
@@ -40,10 +44,11 @@ public class Notification {
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
-    
+
     private LocalDateTime sentAt;
 
-    public Notification() {}
+    public Notification() {
+    }
 
     @PrePersist
     protected void onCreate() {

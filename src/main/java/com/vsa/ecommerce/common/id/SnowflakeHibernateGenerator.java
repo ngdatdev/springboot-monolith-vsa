@@ -2,7 +2,6 @@ package com.vsa.ecommerce.common.id;
 
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 /**

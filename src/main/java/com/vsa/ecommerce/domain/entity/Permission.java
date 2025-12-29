@@ -1,5 +1,6 @@
 package com.vsa.ecommerce.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -57,10 +58,7 @@ public class Permission {
     @Column(length = 255)
     private String description;
 
-    /**
-     * Many-to-many relationship with Role.
-     * A permission can be assigned to multiple roles.
-     */
+    @JsonIgnore
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();
 

@@ -1,4 +1,4 @@
-package com.vsa.ecommerce.common.id;
+package com.vsa.ecommerce.config.id;
 
 import lombok.Getter;
 import lombok.Setter;

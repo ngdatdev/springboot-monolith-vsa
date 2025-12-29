@@ -26,7 +26,7 @@ import java.util.function.Supplier;
  * - User profiles, permissions, configurations
  * - Multi-instance deployments
  */
-public interface HybridCacheManager {
+public interface HybridCacheService {
 
     /**
      * Get value from hybrid cache (L1 → L2 → empty).

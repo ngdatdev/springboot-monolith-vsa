@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.common.cache;
 
-import com.vsa.ecommerce.common.cache.hybrid.HybridCacheManager;
+import com.vsa.ecommerce.common.cache.hybrid.HybridCacheService;
 import com.vsa.ecommerce.common.cache.l1.LocalCacheService;
 import com.vsa.ecommerce.common.cache.l2.RedisCacheService;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HybridCacheIntegrationTest {
 
     @Autowired
-    private HybridCacheManager hybridCacheManager;
+    private HybridCacheService hybridCacheManager;
 
     @Autowired
     private LocalCacheService l1Cache;

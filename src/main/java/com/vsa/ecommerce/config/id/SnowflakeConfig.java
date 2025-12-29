@@ -1,5 +1,6 @@
-package com.vsa.ecommerce.common.id;
+package com.vsa.ecommerce.config.id;
 
+import com.vsa.ecommerce.common.id.SnowflakeIdGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class SnowflakeConfig {
 
-    private final com.vsa.ecommerce.common.id.SnowflakeProperties snowflakeProperties;
+    private final SnowflakeProperties snowflakeProperties;
 
     @Bean
     public SnowflakeIdGenerator snowflakeIdGenerator() {

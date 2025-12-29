@@ -2,15 +2,14 @@ package com.vsa.ecommerce.feature.order.create_order;
 
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
-import com.vsa.ecommerce.common.abstraction.IService;
+import com.vsa.ecommerce.common.abstraction.Service;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-@Service
+@org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class CreateOrderService implements IService<CreateOrderRequest, CreateOrderResponse> {
+public class CreateOrderService implements Service<CreateOrderRequest, CreateOrderResponse> {
 
     @Override
     public CreateOrderResponse execute(CreateOrderRequest request) {

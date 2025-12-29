@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.domain.user;
 
 import com.vsa.ecommerce.common.cache.CacheKeyConvention;
-import com.vsa.ecommerce.common.cache.hybrid.HybridCacheManager;
+import com.vsa.ecommerce.common.cache.hybrid.HybridCacheService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ import static com.vsa.ecommerce.common.cache.CacheKeyConvention.RESOURCE_USER;
 @RequiredArgsConstructor
 public class UserCacheService {
 
-    private final HybridCacheManager cacheManager;
+    private final HybridCacheService cacheManager;
     private final CacheKeyConvention keyConvention;
     // Inject your UserRepository here
     // private final UserRepository userRepository;

@@ -1,6 +1,8 @@
 spring:
   application:
     name: java-vsa-monolith-sourcebase
+    admin:
+      enabled: false
   
   # Database Configuration (Placeholder)
   datasource:
@@ -31,8 +33,8 @@ spring:
 
 # Snowflake ID Generator Configuration
 snowflake:
-  datacenter-id: ${SNOWFLAKE_DATACENTER_ID:0}  # 0-31
-  worker-id: ${SNOWFLAKE_WORKER_ID:0}          # 0-31
+  datacenter-id: 21  # 0-31
+  worker-id: 21         # 0-31
 
 
 mail:
@@ -63,9 +65,12 @@ cloudinary:
 logging:
   level:
     root: INFO
+    org.springdoc: DEBUG
+    org.springframework.web: DEBUG
+    com.vsa.ecommerce: DEBUG
     com.vsa.monolith: DEBUG
-    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: ERROR
-    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: ERROR
+    org.springframework.web.servlet.resource.ResourceHttpRequestHandler: INFO
+    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
     
 server:
   port: 8081
@@ -111,3 +116,13 @@ redis:
       max-idle: 8
       min-idle: 2
       max-wait: -1ms
+
+# SpringDoc OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    disable-swagger-default-url: true # Prevent default petstore
+    operations-sorter: method
+  packages-to-scan: com.vsa.ecommerce

@@ -61,8 +61,7 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(auth -> auth
                                                 // Public endpoints (no authentication required)
                                                 .requestMatchers(
-                                                                "/api/auth/**", // Authentication endpoints
-                                                                "/actuator/health/**" // Health check
+                                                                "/**"// Authentication endpoints
                                                 ).permitAll()
 
                                                 // All other endpoints require authentication

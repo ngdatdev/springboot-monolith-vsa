@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.login;
 
-import com.vsa.ecommerce.common.abstraction.IResponse;
+import com.vsa.ecommerce.common.abstraction.Response;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import java.util.Set;
 @Getter
 @Setter
 @AllArgsConstructor
-public class LoginResponse implements IResponse {
+public class LoginResponse implements Response {
 
     /**
      * JWT access token.

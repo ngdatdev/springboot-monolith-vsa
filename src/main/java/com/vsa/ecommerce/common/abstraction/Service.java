@@ -5,6 +5,6 @@ package com.vsa.ecommerce.common.abstraction;
  * @param <TRequest> The request type, extending IRequest.
  * @param <TResponse> The response type, extending IResponse.
  */
-public interface IService<TRequest extends IRequest, TResponse extends IResponse> {
+public interface Service<TRequest extends Request, TResponse extends Response> {
     TResponse execute(TRequest request);
 }

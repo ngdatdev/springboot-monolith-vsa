@@ -1,28 +1,29 @@
 package com.vsa.ecommerce.config.job;
 
-import com.vsa.ecommerce.common.job.example.CacheCleanupJob;
-import com.vsa.ecommerce.common.job.example.DailySalesReportJob;
-import com.vsa.ecommerce.common.job.example.ExpiredOrderCleanupJob;
+import com.vsa.ecommerce.common.job.BackgroundJob;
 import com.vsa.ecommerce.common.job.JobManagementService;
+import com.vsa.ecommerce.common.job.QuartzJob;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.SchedulerException;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
+
+import java.util.Map;
 
 /**
  * Job scheduler configuration.
  * Initializes and schedules all background jobs on application startup.
+ * 
+ * Auto-discovers jobs annotated with @QuartzJob.
  * 
  * Jobs can be enabled/disabled via application.yml:
  * 
  * <pre>
  * jobs:
  *   enabled: true  # Master switch
- *   cache-cleanup:
- *     enabled: true
- *     cron: "0 0 * * * ?"
  * </pre>
  */
 @Slf4j
@@ -32,35 +33,45 @@ import org.springframework.context.annotation.Configuration;
 public class JobSchedulerConfig {
 
     private final JobManagementService jobManagementService;
+    private final ApplicationContext applicationContext;
 
     @PostConstruct
     public void scheduleJobs() {
         log.info("Initializing background jobs...");
 
+        Map<String, Object> quartzJobs = applicationContext.getBeansWithAnnotation(QuartzJob.class);
+
+        if (quartzJobs.isEmpty()) {
+            log.info("No jobs found with @QuartzJob annotation.");
+            return;
+        }
+
+        quartzJobs.values().forEach(bean -> {
+            if (bean instanceof BackgroundJob) {
+                scheduleSingleJob((BackgroundJob) bean);
+            } else {
+                log.warn("Bean {} is annotated with @QuartzJob but does not extend BackgroundJob",
+                        bean.getClass().getName());
+            }
+        });
+
+        log.info("All background jobs scheduled successfully");
+    }
+
+    private void scheduleSingleJob(BackgroundJob job) {
+        Class<?> jobClass = job.getClass();
+        QuartzJob annotation = jobClass.getAnnotation(QuartzJob.class);
+        String cronExpression = annotation.cron();
+        String jobName = annotation.name().isEmpty() ? job.getJobName() : annotation.name();
+
         try {
-            // Schedule cache cleanup job - runs every hour
             jobManagementService.scheduleJob(
-                    CacheCleanupJob.class,
-                    "0 0 * * * ?" // Every hour at minute 0
-            );
-
-            // Schedule daily sales report - runs at 9 AM daily
-            jobManagementService.scheduleJob(
-                    DailySalesReportJob.class,
-                    "0 0 9 * * ?" // 9:00 AM daily
-            );
-
-            // Schedule expired order cleanup - runs every 30 minutes
-            jobManagementService.scheduleJob(
-                    ExpiredOrderCleanupJob.class,
-                    "0 0/30 * * * ?" // Every 30 minutes
-            );
-
-            log.info("All background jobs scheduled successfully");
-
+                    (Class<? extends BackgroundJob>) jobClass,
+                    cronExpression);
+            log.info("Scheduled job: {} with cron: {}", jobName, cronExpression);
         } catch (SchedulerException e) {
-            log.error("Failed to schedule jobs", e);
-            throw new RuntimeException("Job scheduling failed", e);
+            log.error("Failed to schedule job: {}", jobName, e);
+            throw new RuntimeException("Job scheduling failed for " + jobName, e);
         }
     }
 }

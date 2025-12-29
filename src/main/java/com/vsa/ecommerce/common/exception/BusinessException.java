@@ -17,9 +17,7 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(BusinessStatus status, Object... args) {
         super(String.format(status.getMessage(), args));
-        this.status = status; // Enum is constant, so we can't 'override' message in place easily without wrapper.
-        // NOTE: If we want dynamic message in Result, we rely on Exception message.
-        // Result.failure will likely use ex.getMessage() which is formatted.
+        this.status = status;
     }
 
 }
