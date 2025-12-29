@@ -1,4 +1,4 @@
-package com.vsa.ecommerce.common.storage;
+package com.vsa.ecommerce.config.storage;
 
 import lombok.Getter;
 import lombok.Setter;

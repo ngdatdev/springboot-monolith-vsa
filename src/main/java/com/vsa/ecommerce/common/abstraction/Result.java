@@ -2,7 +2,6 @@ package com.vsa.ecommerce.common.abstraction;
 
 import java.util.Date;
 import java.util.List;
-import lombok.Getter;
 
 /**
  * Unified response wrapper for API results.
@@ -14,13 +13,23 @@ public class Result<T> {
     private final boolean isSuccess;
     private final List<String> errors;
     private final Date timestamp = new Date();
-    
-    public T getData() { return data; }
-    public boolean isSuccess() { return isSuccess; }
-    public List<String> getErrors() { return errors; }
-    public Date getTimestamp() { return timestamp; }
 
-    // Private constructor, use static factories
+    public T getData() {
+        return data;
+    }
+
+    public boolean isSuccess() {
+        return isSuccess;
+    }
+
+    public List<String> getErrors() {
+        return errors;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
     private Result(T data, boolean isSuccess, List<String> errors) {
         this.data = data;
         this.isSuccess = isSuccess;

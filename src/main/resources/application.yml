@@ -18,21 +18,6 @@ spring:
         format_sql: true
     show-sql: false
 
-  # Redis Configuration used by CacheConfig
-  data:
-    redis:
-      host: localhost
-      port: 6379
-      database: 0
-      timeout: 2000ms
-      # password: your_redis_password
-      lettuce:
-        pool:
-          max-active: 8
-          max-idle: 8
-          min-idle: 2
-          max-wait: -1ms
-
   # Security Configuration
   security:
     jwt:
@@ -50,18 +35,18 @@ snowflake:
   worker-id: ${SNOWFLAKE_WORKER_ID:0}          # 0-31
 
 
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${MAIL_USERNAME:your_email@gmail.com}
-    password: ${MAIL_PASSWORD:your_app_password}
-    from: ${MAIL_FROM:noreply@vsa-ecommerce.com}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+mail:
+  host: smtp.gmail.com
+  port: 587
+  username: nguyen.dat.fr@gmail.com
+  password: zona mayl ivjz udyr
+  from: nguyen.dat.fr@gmail.com
+  properties:
+    mail:
+      smtp:
+        auth: true
+        starttls:
+          enable: true
 
   servlet:
     multipart:
@@ -110,3 +95,19 @@ cache:
 # Background Jobs Configuration
 jobs:
   enabled: true  # Master switch for all background jobs
+
+redis:
+  host: valkey-3279477f-ngdat.h.aivencloud.com
+  port: 28168
+  username: default
+  password: AVNS_fOw0EaiZySOfre8OqIZ
+  database: 0
+  ssl:
+    enabled: true
+  timeout: 5s
+  lettuce:
+    pool:
+      max-active: 8
+      max-idle: 8
+      min-idle: 2
+      max-wait: -1ms

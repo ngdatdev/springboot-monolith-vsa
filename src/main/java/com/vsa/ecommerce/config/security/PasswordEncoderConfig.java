@@ -1,4 +1,4 @@
-package com.vsa.ecommerce.common.security;
+package com.vsa.ecommerce.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,7 @@
-package com.vsa.ecommerce.common.security;
+package com.vsa.ecommerce.config.security;
 
 import com.vsa.ecommerce.common.security.jwt.JwtAuthenticationFilter;
+import com.vsa.ecommerce.common.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

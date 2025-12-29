@@ -1,5 +1,7 @@
 package com.vsa.ecommerce.common.mail;
 
+import com.vsa.ecommerce.config.mail.MailProperties;
+
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;

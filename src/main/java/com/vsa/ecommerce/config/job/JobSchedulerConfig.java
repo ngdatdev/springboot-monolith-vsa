@@ -1,8 +1,9 @@
-package com.vsa.ecommerce.common.job;
+package com.vsa.ecommerce.config.job;
 
 import com.vsa.ecommerce.common.job.example.CacheCleanupJob;
 import com.vsa.ecommerce.common.job.example.DailySalesReportJob;
 import com.vsa.ecommerce.common.job.example.ExpiredOrderCleanupJob;
+import com.vsa.ecommerce.common.job.JobManagementService;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

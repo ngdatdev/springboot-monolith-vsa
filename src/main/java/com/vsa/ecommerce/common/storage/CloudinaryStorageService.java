@@ -2,6 +2,7 @@ package com.vsa.ecommerce.common.storage;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.vsa.ecommerce.config.storage.CloudinaryProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
