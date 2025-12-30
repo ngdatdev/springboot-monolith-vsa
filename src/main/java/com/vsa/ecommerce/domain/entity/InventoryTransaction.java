@@ -1,9 +1,12 @@
 package com.vsa.ecommerce.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vsa.ecommerce.common.domain.BaseEntity;
 import com.vsa.ecommerce.domain.enums.InventoryTransactionType;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Immutable audit log of all inventory changes.
@@ -12,7 +15,10 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "inventory_transactions")
-public class InventoryTransaction {
+@Getter
+@Setter
+@NoArgsConstructor
+public class InventoryTransaction extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,15 +49,4 @@ public class InventoryTransaction {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
     private Order relatedOrder;
-
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime timestamp;
-
-    public InventoryTransaction() {
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.timestamp = LocalDateTime.now();
-    }
 }

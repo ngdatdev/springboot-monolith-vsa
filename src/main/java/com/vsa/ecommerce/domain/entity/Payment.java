@@ -1,17 +1,24 @@
 package com.vsa.ecommerce.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vsa.ecommerce.common.domain.BaseEntity;
 import com.vsa.ecommerce.domain.enums.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * Represents a payment attempt for an order.
  */
 @Entity
 @Table(name = "payments")
-public class Payment {
+@Getter
+@Setter
+@NoArgsConstructor
+public class Payment extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,15 +41,4 @@ public class Payment {
 
     @Column(columnDefinition = "TEXT")
     private String failureReason;
-
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
-    public Payment() {
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 }

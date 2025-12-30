@@ -1,7 +1,12 @@
 package com.vsa.ecommerce.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vsa.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 
 /**
@@ -11,7 +16,10 @@ import java.math.BigDecimal;
  */
 @Entity
 @Table(name = "order_items")
-public class OrderItem {
+@Getter
+@Setter
+@NoArgsConstructor
+public class OrderItem extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +54,4 @@ public class OrderItem {
 
     @Column(nullable = false)
     private Integer quantity;
-
-    public OrderItem() {
-    }
 }

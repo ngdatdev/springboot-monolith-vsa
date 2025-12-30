@@ -1,8 +1,13 @@
 package com.vsa.ecommerce.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vsa.ecommerce.common.domain.BaseEntity;
 import com.vsa.ecommerce.domain.enums.NotificationStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
 /**
@@ -11,7 +16,10 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "notifications")
-public class Notification {
+@Getter
+@Setter
+@NoArgsConstructor
+public class Notification extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,16 +50,5 @@ public class Notification {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String payloadJson;
 
-    @Column(nullable = false)
-    private LocalDateTime createdAt;
-
     private LocalDateTime sentAt;
-
-    public Notification() {
-    }
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-    }
 }

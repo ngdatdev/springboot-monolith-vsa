@@ -63,7 +63,7 @@ public class UserPrincipal implements UserDetails {
 
         for (Role role : roles) {
             // Add role as authority (prefix with ROLE_)
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().name()));
 
             // Add all permissions from this role
             for (Permission permission : role.getPermissions()) {

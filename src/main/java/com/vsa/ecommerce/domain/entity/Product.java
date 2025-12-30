@@ -1,16 +1,24 @@
 package com.vsa.ecommerce.domain.entity;
 
+import com.vsa.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * Represents a product in the catalog.
- * In a real ecommerce, this is often tightly referenced by Orders and Inventory.
+ * In a real ecommerce, this is often tightly referenced by Orders and
+ * Inventory.
  */
 @Entity
 @Table(name = "products")
-public class Product {
+@Getter
+@Setter
+@NoArgsConstructor
+public class Product extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,26 +36,7 @@ public class Product {
     @Column(nullable = false)
     private String sku;
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
     // Optimistic locking for product catalog updates
     @Version
     private Long version;
-
-    public Product() {}
-
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
 }

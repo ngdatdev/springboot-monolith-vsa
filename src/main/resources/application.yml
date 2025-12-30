@@ -4,21 +4,27 @@ spring:
     admin:
       enabled: false
   
-  # Database Configuration (Placeholder)
+  # Database Configuration (Advanced)
   datasource:
     url: jdbc:postgresql://localhost:5000/commerce_core
     username: commerce_core
     password: zxcl123123
     driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 10
+      idle-timeout: 300000
+      connection-timeout: 30000
+      max-lifetime: 1800000
+      pool-name: VSA-Ecommerce-Hikari-Pool
+    jpa:
+      ddl-auto: update
+      show-sql: false
+      format-sql: true
   
+  # Spring standard jpa section is now restricted to non-datasource specific settings
   jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    show-sql: false
+    open-in-view: false
 
   # Security Configuration
   security:

@@ -1,7 +1,10 @@
 package com.vsa.ecommerce.domain.entity;
 
+import com.vsa.ecommerce.common.domain.BaseEntity;
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * Tracks stock for a specific product.
@@ -10,7 +13,10 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "inventory")
-public class Inventory {
+@Getter
+@Setter
+@NoArgsConstructor
+public class Inventory extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,15 +42,10 @@ public class Inventory {
     @Column(nullable = false)
     private Integer reservedQuantity;
 
-    @Column(nullable = false)
-    private LocalDateTime lastUpdated;
-
     /**
      * Version field for optimistic locking.
      * Prevents race conditions when two orders try to reserve stock simultaneously.
      */
     @Version
     private Long version;
-
-    public Inventory() {}
 }

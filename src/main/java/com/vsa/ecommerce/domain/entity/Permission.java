@@ -1,13 +1,14 @@
 package com.vsa.ecommerce.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vsa.ecommerce.common.domain.BaseEntity;
+import com.vsa.ecommerce.domain.enums.AppPermission;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,14 +16,6 @@ import java.util.Set;
  * Permission entity for fine-grained access control.
  * 
  * Permission Format: {resource}:{action}
- * 
- * Examples:
- * - order:read
- * - order:write
- * - order:delete
- * - product:read
- * - product:write
- * - user:admin
  */
 @Entity
 @Table(name = "permissions")
@@ -30,7 +23,7 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Permission {
+public class Permission extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,12 +55,6 @@ public class Permission {
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles = new HashSet<>();
 
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
-
     @Version
     private Long version;
 
@@ -78,15 +65,15 @@ public class Permission {
         this.description = description;
     }
 
-    @PrePersist
-    protected void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
-    }
-
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    /**
+     * Create Permission from AppPermission enum.
+     */
+    public static Permission fromAppPermission(AppPermission appPermission) {
+        return new Permission(
+                appPermission.getName(),
+                appPermission.getResource(),
+                appPermission.getAction(),
+                appPermission.getDescription());
     }
 
     /**
