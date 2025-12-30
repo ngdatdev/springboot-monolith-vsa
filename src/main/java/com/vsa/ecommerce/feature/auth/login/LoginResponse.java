@@ -12,13 +12,17 @@ import java.util.Set;
  */
 @Getter
 @Setter
-@AllArgsConstructor
 public class LoginResponse implements Response {
 
     /**
      * JWT access token.
      */
     private String accessToken;
+
+    /**
+     * JWT refresh token.
+     */
+    private String refreshToken;
 
     /**
      * Token type (always "Bearer").
@@ -31,9 +35,23 @@ public class LoginResponse implements Response {
     private Long expiresIn;
 
     /**
+     * Refresh token expiration time in seconds.
+     */
+    private Long refreshExpiresIn;
+
+    /**
      * User information.
      */
     private UserInfo user;
+
+    public LoginResponse(String accessToken, String refreshToken, Long expiresIn, Long refreshExpiresIn,
+            UserInfo user) {
+        this.accessToken = accessToken;
+        this.refreshToken = refreshToken;
+        this.expiresIn = expiresIn;
+        this.refreshExpiresIn = refreshExpiresIn;
+        this.user = user;
+    }
 
     /**
      * Nested UserInfo class.
@@ -48,11 +66,5 @@ public class LoginResponse implements Response {
         private String lastName;
         private Set<String> roles;
         private Set<String> permissions;
-    }
-
-    public LoginResponse(String accessToken, Long expiresIn, UserInfo user) {
-        this.accessToken = accessToken;
-        this.expiresIn = expiresIn;
-        this.user = user;
     }
 }

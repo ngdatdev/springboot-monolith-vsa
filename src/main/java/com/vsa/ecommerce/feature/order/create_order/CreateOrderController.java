@@ -4,6 +4,7 @@ import com.vsa.ecommerce.common.abstraction.BaseController;
 import com.vsa.ecommerce.common.abstraction.Result;
 import jakarta.annotation.security.PermitAll;
 import lombok.RequiredArgsConstructor;
+import com.vsa.ecommerce.common.idempotent.Idempotent;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ public class CreateOrderController extends BaseController {
 
     private final CreateOrderService createOrderService;
 
+    @Idempotent(keyPrefix = "order:create:")
     @PostMapping
     @PermitAll
     public ResponseEntity<CreateOrderResponse> createOrder(@RequestBody CreateOrderRequest request) {

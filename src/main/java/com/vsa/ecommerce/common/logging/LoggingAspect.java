@@ -5,56 +5,67 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import java.util.Arrays;
 
+/**
+ * Aspect for automated logging of Controller and Service methods.
+ * Provides entry, exit, and execution time tracing.
+ */
 @Aspect
 @Component
 @Slf4j
 public class LoggingAspect {
 
     /**
-     * Pointcut that matches all repositories, services and Web REST endpoints.
+     * Pointcut for all methods in classes annotated with @RestController
+     * or @Service.
      */
-    @Pointcut("within(@org.springframework.stereotype.Repository *)" +
-            " || within(@org.springframework.stereotype.Service *)" +
-            " || within(@org.springframework.web.bind.annotation.RestController *)")
-    public void springBeanPointcut() {
-        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+    @Pointcut("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Service)")
+    public void springManagedComponents() {
     }
 
     /**
-     * Pointcut that matches all Spring beans in the application's main packages.
+     * Pointcut for methods or classes annotated with @NoLog.
      */
-    @Pointcut("within(com.vsa.ecommerce..*)")
-    public void applicationPackagePointcut() {
-        // Method is empty as this is just a Pointcut, the implementations are in the advices.
+    @Pointcut("@annotation(com.vsa.ecommerce.common.logging.NoLog) || @within(com.vsa.ecommerce.common.logging.NoLog)")
+    public void excludedFromLogging() {
     }
 
     /**
-     * Advice that logs when a method is entered and exited.
+     * Around advice to log method execution details.
      */
-    @Around("applicationPackagePointcut() && springBeanPointcut()")
-    public Object logAround(ProceedingJoinPoint joinPoint) throws Throwable {
-        long start = System.currentTimeMillis();
+    @Around("springManagedComponents() && !excludedFromLogging()")
+    public Object logExecution(ProceedingJoinPoint joinPoint) throws Throwable {
+        MethodSignature signature = (MethodSignature) joinPoint.getSignature();
+        String className = signature.getDeclaringType().getSimpleName();
+        String methodName = signature.getName();
+        String fullName = className + "." + methodName;
+
+        // Log entry
+        log.info("[START] Execution: {}", fullName);
         if (log.isDebugEnabled()) {
-            log.debug("Enter: {}.{}() with argument[s] = {}", joinPoint.getSignature().getDeclaringTypeName(),
-                    joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+            log.debug("[ARGS] {}: {}", fullName, Arrays.toString(joinPoint.getArgs()));
         }
+
+        StopWatch stopWatch = new StopWatch();
+        stopWatch.start();
 
         try {
             Object result = joinPoint.proceed();
-            long executionTime = System.currentTimeMillis() - start;
-            if (log.isDebugEnabled()) {
-                log.debug("Exit: {}.{}() with result = {} ({} ms)", joinPoint.getSignature().getDeclaringTypeName(),
-                        joinPoint.getSignature().getName(), result, executionTime);
-            }
+
+            stopWatch.stop();
+            log.info("[END] Execution: {} | Success | Duration: {}ms", fullName, stopWatch.getTotalTimeMillis());
+
             return result;
-        } catch (IllegalArgumentException e) {
-            log.error("Illegal argument: {} in {}.{}()", Arrays.toString(joinPoint.getArgs()),
-                    joinPoint.getSignature().getDeclaringTypeName(), joinPoint.getSignature().getName());
-            throw e;
+        } catch (Throwable throwable) {
+            stopWatch.stop();
+            log.error("[ERROR] Execution: {} | Failed | Duration: {}ms | Message: {}",
+                    fullName, stopWatch.getTotalTimeMillis(), throwable.getMessage());
+            throw throwable;
         }
     }
 }

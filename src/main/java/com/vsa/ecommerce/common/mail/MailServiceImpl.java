@@ -138,4 +138,15 @@ public class MailServiceImpl implements MailService {
 
         sendHtmlEmail(to, "Order Confirmation #" + orderNumber, "order-confirmation", variables);
     }
+
+    /**
+     * Send email verification OTP.
+     */
+    public void sendEmailVerificationOtp(String to, String otp) {
+        Map<String, Object> variables = Map.of(
+                "otp", otp,
+                "appName", "VSA E-Commerce");
+
+        sendHtmlEmail(to, "Verify Your Email", "verify-email", variables);
+    }
 }

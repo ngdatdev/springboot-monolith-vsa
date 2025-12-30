@@ -1,6 +1,8 @@
 package com.vsa.ecommerce.feature.auth.login;
 
 import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.exception.BusinessException;
+import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.UserPrincipal;
 import com.vsa.ecommerce.common.security.jwt.JwtProperties;
 import com.vsa.ecommerce.common.security.jwt.JwtTokenProvider;
@@ -22,43 +24,67 @@ public class LoginService implements Service<LoginRequest, LoginResponse> {
         private final AuthenticationManager authenticationManager;
         private final JwtTokenProvider jwtTokenProvider;
         private final JwtProperties jwtProperties;
+        private final AuthMapper authMapper;
+        private final org.springframework.data.redis.core.RedisTemplate<String, String> redisTemplate;
+        private final com.vsa.ecommerce.common.security.LoginAttemptService loginAttemptService;
 
         @Override
         public LoginResponse execute(LoginRequest request) {
-                log.info("Login attempt for email: {}", request.getEmail());
+                // Check if account is blocked
+                if (loginAttemptService.isBlocked(request.getEmail())) {
+                        log.warn("Login blocked for email: {} due to too many failed attempts", request.getEmail());
+                        throw new BusinessException(BusinessStatus.TOO_MANY_REQUESTS,
+                                        "Account is temporarily locked. Please try again later.");
+                }
 
-                // Authenticate user with email and password
-                Authentication authentication = authenticationManager.authenticate(
-                                new UsernamePasswordAuthenticationToken(
-                                                request.getEmail(),
-                                                request.getPassword()));
+                try {
+                        // Authenticate user with email and password
+                        Authentication authentication = authenticationManager.authenticate(
+                                        new UsernamePasswordAuthenticationToken(
+                                                        request.getEmail(),
+                                                        request.getPassword()));
 
-                // Set authentication in SecurityContext
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                        // Set authentication in SecurityContext
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-                // Get authenticated user
-                UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+                        // Success: Reset attempt count
+                        loginAttemptService.loginSucceeded(request.getEmail());
 
-                // Generate JWT token
-                String accessToken = jwtTokenProvider.generateAccessToken(
-                                userPrincipal.getId(),
-                                userPrincipal.getEmail(),
-                                userPrincipal.getAuthorities());
+                        // Get authenticated user
+                        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-                // Calculate token expiration
-                Long expiresIn = jwtProperties.getExpirationMs() / 1000; // Convert to seconds
+                        // Generate JWT access token
+                        String accessToken = jwtTokenProvider.generateAccessToken(
+                                        userPrincipal.getId(),
+                                        userPrincipal.getEmail(),
+                                        userPrincipal.getAuthorities());
 
-                // Build user info
-                LoginResponse.UserInfo userInfo = new LoginResponse.UserInfo(
-                                userPrincipal.getId(),
-                                userPrincipal.getEmail(),
-                                userPrincipal.getFirstName(),
-                                userPrincipal.getLastName(),
-                                userPrincipal.getRoleNames(),
-                                userPrincipal.getPermissionNames());
+                        // Generate JWT refresh token
+                        String refreshToken = jwtTokenProvider.generateRefreshToken(userPrincipal.getId());
 
-                log.info("Login successful for user: {}", request.getEmail());
+                        // Store refresh token in Redis
+                        String redisKey = "refresh_token:" + userPrincipal.getId();
+                        redisTemplate.opsForValue().set(
+                                        redisKey,
+                                        refreshToken,
+                                        jwtProperties.getRefreshExpirationMs(),
+                                        java.util.concurrent.TimeUnit.MILLISECONDS);
 
-                return new LoginResponse(accessToken, expiresIn, userInfo);
+                        // Calculate token expirations
+                        Long expiresIn = jwtProperties.getExpirationMs() / 1000;
+                        Long refreshExpiresIn = jwtProperties.getRefreshExpirationMs() / 1000;
+
+                        // Build user info
+                        LoginResponse.UserInfo userInfo = authMapper.toUserInfo(userPrincipal);
+
+                        log.info("Login successful for user: {}", request.getEmail());
+
+                        return new LoginResponse(accessToken, refreshToken, expiresIn, refreshExpiresIn, userInfo);
+
+                } catch (org.springframework.security.core.AuthenticationException ex) {
+                        // Failure: Increment attempt count
+                        loginAttemptService.loginFailed(request.getEmail());
+                        throw new BusinessException(BusinessStatus.UNAUTHORIZED, "Invalid email or password");
+                }
         }
 }

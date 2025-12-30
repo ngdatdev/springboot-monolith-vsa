@@ -31,4 +31,9 @@ public interface MailService {
      * Send order confirmation email.
      */
     void sendOrderConfirmationEmail(String to, String orderNumber, String totalAmount);
+
+    /**
+     * Send email verification OTP.
+     */
+    void sendEmailVerificationOtp(String to, String otp);
 }
