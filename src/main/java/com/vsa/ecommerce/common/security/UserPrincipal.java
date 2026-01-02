@@ -1,6 +1,5 @@
 package com.vsa.ecommerce.common.security;
 
-import com.vsa.ecommerce.domain.entity.Permission;
 import com.vsa.ecommerce.domain.entity.Role;
 import com.vsa.ecommerce.domain.entity.User;
 import lombok.AllArgsConstructor;
@@ -53,10 +52,9 @@ public class UserPrincipal implements UserDetails {
     }
 
     /**
-     * Build authorities from roles and permissions.
+     * Build authorities from roles.
      * Format:
      * - Roles: ROLE_ADMIN, ROLE_USER
-     * - Permissions: order:read, product:write
      */
     private static Collection<GrantedAuthority> buildAuthorities(Set<Role> roles) {
         Set<GrantedAuthority> authorities = new HashSet<>();
@@ -64,11 +62,6 @@ public class UserPrincipal implements UserDetails {
         for (Role role : roles) {
             // Add role as authority (prefix with ROLE_)
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName().name()));
-
-            // Add all permissions from this role
-            for (Permission permission : role.getPermissions()) {
-                authorities.add(new SimpleGrantedAuthority(permission.getName()));
-            }
         }
 
         return authorities;
@@ -82,16 +75,6 @@ public class UserPrincipal implements UserDetails {
                 .map(GrantedAuthority::getAuthority)
                 .filter(auth -> auth.startsWith("ROLE_"))
                 .map(auth -> auth.substring(5)) // Remove "ROLE_" prefix
-                .collect(Collectors.toSet());
-    }
-
-    /**
-     * Get permission names.
-     */
-    public Set<String> getPermissionNames() {
-        return authorities.stream()
-                .map(GrantedAuthority::getAuthority)
-                .filter(auth -> !auth.startsWith("ROLE_"))
                 .collect(Collectors.toSet());
     }
 

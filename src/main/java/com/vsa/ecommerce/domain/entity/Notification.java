@@ -40,6 +40,15 @@ public class Notification extends BaseEntity {
     @JoinColumn(name = "order_id")
     private Order relatedOrder;
 
+    @Column(nullable = false)
+    private String title;
+
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String message;
+
+    @Column(nullable = false)
+    private String type;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private NotificationStatus status;

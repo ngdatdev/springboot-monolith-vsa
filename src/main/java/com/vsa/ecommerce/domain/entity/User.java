@@ -39,6 +39,9 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String lastName;
 
+    @Column
+    private String phoneNumber;
+
     /**
      * BCrypt encoded password for authentication.
      */

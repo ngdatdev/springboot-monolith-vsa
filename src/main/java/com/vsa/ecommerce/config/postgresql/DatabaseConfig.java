@@ -22,7 +22,10 @@ import java.util.Properties;
  * control.
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "com.vsa.ecommerce.domain.repository", repositoryBaseClass = BaseRepositoryImpl.class)
+@EnableJpaRepositories(basePackages = {
+        "com.vsa.ecommerce.common.security.repository",
+        "com.vsa.ecommerce.feature"
+}, repositoryBaseClass = BaseRepositoryImpl.class)
 @RequiredArgsConstructor
 public class DatabaseConfig {
 

@@ -9,9 +9,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum UserRole {
-    SUPER_ADMIN("Full system access"),
     ADMIN("Administrative access"),
-    MANAGER("Management access"),
     USER("Standard user access"),
     GUEST("Read-only access");
 

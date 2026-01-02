@@ -49,30 +49,11 @@ public class Role extends BaseEntity {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
-    /**
-     * Many-to-many relationship with Permission.
-     * A role can have multiple permissions.
-     */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
-    private Set<Permission> permissions = new HashSet<>();
-
     @Version
     private Long version;
 
     public Role(UserRole name, String description) {
         this.name = name;
         this.description = description;
-    }
-
-    // Helper methods
-    public void addPermission(Permission permission) {
-        this.permissions.add(permission);
-        permission.getRoles().add(this);
-    }
-
-    public void removePermission(Permission permission) {
-        this.permissions.remove(permission);
-        permission.getRoles().remove(this);
     }
 }

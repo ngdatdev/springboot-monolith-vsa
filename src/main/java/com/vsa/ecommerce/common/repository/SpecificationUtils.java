@@ -1,9 +1,5 @@
 package com.vsa.ecommerce.common.repository;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
@@ -51,21 +47,21 @@ public class SpecificationUtils {
         };
     }
 
-    public static <T> Specification<T> greaterThan(String attribute, Comparable value) {
+    public static <T> Specification<T> greaterThan(String attribute, Comparable<?> value) {
         return (root, query, cb) -> {
             if (value == null) {
                 return null;
             }
-            return cb.greaterThan(root.get(attribute), value);
+            return cb.greaterThan(root.get(attribute), (Comparable) value);
         };
     }
 
-    public static <T> Specification<T> lessThan(String attribute, Comparable value) {
+    public static <T> Specification<T> lessThan(String attribute, Comparable<?> value) {
         return (root, query, cb) -> {
             if (value == null) {
                 return null;
             }
-            return cb.lessThan(root.get(attribute), value);
+            return cb.lessThan(root.get(attribute), (Comparable) value);
         };
     }
 

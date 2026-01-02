@@ -19,11 +19,7 @@ public class AuthMapper {
                 user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
-                user.getRoles().stream().map(r -> r.getName().name()).collect(Collectors.toSet()),
-                user.getRoles().stream()
-                        .flatMap(r -> r.getPermissions().stream())
-                        .map(p -> p.getName())
-                        .collect(Collectors.toSet()));
+                user.getRoles().stream().map(r -> r.getName().name()).collect(Collectors.toSet()));
     }
 
     public LoginResponse.UserInfo toUserInfo(UserPrincipal principal) {
@@ -36,7 +32,6 @@ public class AuthMapper {
                 principal.getEmail(),
                 principal.getFirstName(),
                 principal.getLastName(),
-                principal.getRoleNames(),
-                principal.getPermissionNames());
+                principal.getRoleNames());
     }
 }

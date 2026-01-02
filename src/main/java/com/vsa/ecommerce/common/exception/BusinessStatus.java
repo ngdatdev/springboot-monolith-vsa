@@ -38,13 +38,28 @@ public enum BusinessStatus {
     LOCK_FAILURE("Lock Acquisition Failure"),
     EXTERNAL_SERVICE_TIMEOUT("External Service Timeout"),
 
-    // Domain Errors (Merged)
+    // Domain Errors
     INVALID_PRODUCT("Product ID cannot be empty."),
-    INVALID_QUANTITY("Quantity must be greater than zero. Value: %d");
+    INVALID_QUANTITY("Quantity must be greater than zero. Value: %d"),
+    USER_NOT_FOUND(404, "User not found"),
+    PRODUCT_NOT_FOUND(404, "Product not found"),
+    ORDER_NOT_FOUND(404, "Order not found"),
+    INSUFFICIENT_STOCK(400, "Insufficient stock"),
+    INVALID_ORDER_STATUS_TRANSITION(400, "Invalid order status transition"),
+    RESOURCE_NOT_FOUND(404, "Resource not found"),
+    CART_EMPTY(400, "Cart is empty");
 
+    private final int httpStatus; // Added httpStatus field
     private final String message;
 
-    BusinessStatus(String message) {
+    // Modified constructor to accept httpStatus
+    BusinessStatus(int httpStatus, String message) {
+        this.httpStatus = httpStatus;
         this.message = message;
+    }
+
+    // Overloaded constructor for existing enums without httpStatus
+    BusinessStatus(String message) {
+        this(0, message); // Default httpStatus to 0 or another appropriate value
     }
 }

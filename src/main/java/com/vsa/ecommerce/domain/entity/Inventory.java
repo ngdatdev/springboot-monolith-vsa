@@ -48,4 +48,25 @@ public class Inventory extends BaseEntity {
      */
     @Version
     private Long version;
+
+    // --- Business Logic ---
+
+    public void reserve(int quantity) {
+        if (availableQuantity < quantity) {
+            throw new com.vsa.ecommerce.common.exception.BusinessException(
+                    com.vsa.ecommerce.common.exception.BusinessStatus.INSUFFICIENT_STOCK);
+        }
+        this.availableQuantity -= quantity;
+        this.reservedQuantity += quantity;
+    }
+
+    public void release(int quantity) {
+        this.reservedQuantity -= quantity;
+        this.availableQuantity += quantity;
+        // Logic to bound at 0 or handle logic errors could be added, but assuming valid
+        // calls from trusted services.
+        if (this.reservedQuantity < 0) {
+            this.reservedQuantity = 0; // Self-correction or throw error
+        }
+    }
 }

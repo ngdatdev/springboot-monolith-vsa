@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vsa.ecommerce.common.abstraction.BaseController;
 import com.vsa.ecommerce.common.ratelimit.RateLimit;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 /**
@@ -22,6 +23,7 @@ import jakarta.validation.Valid;
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Auth endpoints")
 @RequiredArgsConstructor
 public class LoginController extends BaseController {
 

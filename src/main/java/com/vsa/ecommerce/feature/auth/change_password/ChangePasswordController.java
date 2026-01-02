@@ -1,6 +1,8 @@
 package com.vsa.ecommerce.feature.auth.change_password;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
+@Tag(name = "Authentication", description = "Auth endpoints")
 @RequiredArgsConstructor
 public class ChangePasswordController extends BaseController {
 

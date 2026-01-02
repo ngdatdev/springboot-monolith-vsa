@@ -65,6 +65,5 @@ public class LoginResponse implements Response {
         private String firstName;
         private String lastName;
         private Set<String> roles;
-        private Set<String> permissions;
     }
 }

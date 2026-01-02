@@ -9,7 +9,6 @@ import com.vsa.ecommerce.domain.entity.Role;
 import com.vsa.ecommerce.domain.entity.User;
 import com.vsa.ecommerce.domain.enums.UserRole;
 import com.vsa.ecommerce.domain.enums.UserStatus;
-import com.vsa.ecommerce.domain.repository.RoleRepository;
 import com.vsa.ecommerce.feature.auth.login.AuthMapper;
 import com.vsa.ecommerce.feature.auth.login.LoginResponse;
 import lombok.RequiredArgsConstructor;
@@ -27,8 +26,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class RegisterService implements Service<RegisterRequest, RegisterResponse> {
 
-    private final RegisterRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final com.vsa.ecommerce.common.security.repository.SecurityUserRepository userRepository;
+    private final com.vsa.ecommerce.common.security.repository.SecurityRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthMapper authMapper;
     private final OtpService otpService;

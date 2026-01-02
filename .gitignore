@@ -1,33 +1,78 @@
-HELP.md
+# --- Build Artifacts ---
 target/
-.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+build/
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
 
-### STS ###
+# --- Log Files ---
+*.log
+logs/
+
+# --- IDE Specific ---
+# IntelliJ IDEA
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+cmake-build-*/
+.attach_pid*
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+# Eclipse / STS
 .apt_generated
 .classpath
 .factorypath
 .project
-.settings
+.settings/
 .springBeans
-.sts4-cache
+.sts4-cache/
 
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### VS Code ###
-.vscode/
+# --- Environment & Security ---
+# Exclude sensitive configuration
+# Generally, application.yml (default) is committed with placeholders
+# Local overrides and secrets should go in -local.yml or .env
+*-local.yml
+*-local.properties
+.env
+.env.local
+.terraform/
+*.tfvars
+.vault-token
+
+# --- OS Generated ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- Miscellaneous ---
+HELP.md
+.mvn/wrapper/maven-wrapper.jar
+.apt_generated/
+.idea/webResources.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/jpa-project.xml
+.idea/dictionaries/
+.idea/libraries/
+*.patch
+*.diff

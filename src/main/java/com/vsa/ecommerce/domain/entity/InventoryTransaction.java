@@ -45,6 +45,12 @@ public class InventoryTransaction extends BaseEntity {
     @Column(nullable = false)
     private Integer quantityAfter;
 
+    @Column(length = 255)
+    private String reason;
+
+    @Column(length = 255)
+    private String referenceId;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")

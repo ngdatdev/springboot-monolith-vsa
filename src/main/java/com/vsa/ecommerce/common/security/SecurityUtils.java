@@ -67,12 +67,4 @@ public class SecurityUtils {
                 .orElse(false);
     }
 
-    /**
-     * Check if current user has a specific permission.
-     */
-    public static boolean hasPermission(String permission) {
-        return getCurrentUserPrincipal()
-                .map(user -> user.getPermissionNames().contains(permission))
-                .orElse(false);
-    }
 }
