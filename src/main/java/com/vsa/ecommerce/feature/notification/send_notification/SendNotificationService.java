@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.feature.notification.send_notification;
 
 import com.vsa.ecommerce.common.abstraction.EmptyResponse;
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Notification;
@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class SendNotificationService implements Service<SendNotificationRequest, EmptyResponse> {
+public class SendNotificationService implements IService<SendNotificationRequest, EmptyResponse> {
 
     private final SendNotificationRepository repository;
 

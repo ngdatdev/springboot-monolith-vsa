@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.user.get_user_orders;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Order;
 import com.vsa.ecommerce.feature.user.dto.UserIdRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class GetUserOrdersService implements Service<UserIdRequest, OrderListResponse> {
+public class GetUserOrdersService implements IService<UserIdRequest, OrderListResponse> {
 
     private final GetUserOrdersRepository getUserOrdersRepository;
 

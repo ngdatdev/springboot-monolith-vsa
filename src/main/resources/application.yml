@@ -3,6 +3,9 @@ spring:
     name: java-vsa-monolith-sourcebase
     admin:
       enabled: false
+  output:
+    ansi:
+      enabled: ALWAYS
   
   # Database Configuration (Advanced)
   datasource:
@@ -26,16 +29,23 @@ spring:
   jpa:
     open-in-view: false
 
+  # Jackson Configuration
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
+
   # Security Configuration
-  security:
-    jwt:
-      # IMPORTANT: Change this in production! Store in environment variable
-      # Must be at least 256 bits (32 bytes) for HS256
-      # Generate with: openssl rand -base64 32
-      secret-key: ${JWT_SECRET_KEY:dGhpc2lzYXZlcnlsb25nc2VjcmV0a2V5dGhhdG5lZWRzdG9iZWF0bGVhc3QzMmJ5dGVzZm9ySFMyNTY=}
-      expiration-ms: 3600000       # 1 hour (in milliseconds)
-      refresh-expiration-ms: 86400000  # 24 hours (in milliseconds)
-      issuer: vsa-ecommerce
+  # Security Configuration
+security:
+  jwt:
+    # IMPORTANT: Change this in production! Store in environment variable
+    # Must be at least 256 bits (32 bytes) for HS256
+    # Generate with: openssl rand -base64 32
+    # Secret key for HS512 (must be >= 512 bits / 64 bytes)
+    secret-key: 94dVTstqm+0ZlG5DHL9WJBIs4LFxTmuoDi/3YQQPgJx4IVW1HFHhrvAi1pm7m1wHp1R7VQL+HuRiopkoezz5yNg==
+    expiration-ms: 3600000       # 1 hour (in milliseconds)
+    refresh-expiration-ms: 86400000  # 24 hours (in milliseconds)
+    issuer: vsa-ecommerce
 
 # Snowflake ID Generator Configuration
 snowflake:

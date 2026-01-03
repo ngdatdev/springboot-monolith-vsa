@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.feature.payment.confirm_payment;
 
 import com.vsa.ecommerce.common.abstraction.EmptyResponse;
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Order;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class ConfirmPaymentService implements Service<ConfirmPaymentRequest, EmptyResponse> {
+public class ConfirmPaymentService implements IService<ConfirmPaymentRequest, EmptyResponse> {
 
     private final ConfirmPaymentRepository repository;
 

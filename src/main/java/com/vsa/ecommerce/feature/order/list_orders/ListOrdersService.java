@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.order.list_orders;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ListOrdersService implements Service<ListOrdersRequest, ListOrdersResponse> {
+public class ListOrdersService implements IService<ListOrdersRequest, ListOrdersResponse> {
 
     private final ListOrdersRepository listOrdersRepository;
 

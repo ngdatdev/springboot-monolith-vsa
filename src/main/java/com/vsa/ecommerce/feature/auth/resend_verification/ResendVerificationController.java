@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/*
+ * Controller for resend verification requests.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "Authentication")
+@Tag(name = "Authentication", description = "Auth endpoints")
 public class ResendVerificationController extends BaseController {
 
     private final ResendVerificationService service;

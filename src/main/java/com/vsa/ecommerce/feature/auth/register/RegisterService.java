@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.register;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.mail.MailService;
@@ -24,7 +24,7 @@ import java.util.Set;
 @Slf4j
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class RegisterService implements Service<RegisterRequest, RegisterResponse> {
+public class RegisterService implements IService<RegisterRequest, RegisterResponse> {
 
     private final com.vsa.ecommerce.common.security.repository.SecurityUserRepository userRepository;
     private final com.vsa.ecommerce.common.security.repository.SecurityRoleRepository roleRepository;

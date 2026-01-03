@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.order.admin_list_orders;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Order;
 import com.vsa.ecommerce.feature.order.dto.OrderDto;
 import com.vsa.ecommerce.feature.order.dto.OrderItemDto;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class AdminListOrdersService implements Service<AdminListOrdersRequest, AdminListOrdersResponse> {
+public class AdminListOrdersService implements IService<AdminListOrdersRequest, AdminListOrdersResponse> {
 
     private final AdminListOrdersRepository adminListOrdersRepository;
 

@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.feature.inventory.adjust_inventory;
 
 import com.vsa.ecommerce.common.abstraction.EmptyResponse;
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Inventory;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class AdjustInventoryService implements Service<AdjustInventoryRequest, EmptyResponse> {
+public class AdjustInventoryService implements IService<AdjustInventoryRequest, EmptyResponse> {
 
     private final AdjustInventoryRepository repository;
 

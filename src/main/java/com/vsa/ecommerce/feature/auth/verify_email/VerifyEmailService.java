@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.verify_email;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.otp.OtpService;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class VerifyEmailService implements Service<VerifyEmailRequest, VerifyEmailResponse> {
+public class VerifyEmailService implements IService<VerifyEmailRequest, VerifyEmailResponse> {
 
     private final RegisterRepository userRepository;
     private final OtpService otpService;

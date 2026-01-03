@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.inventory.get_inventory_transactions;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.InventoryTransaction;
 import com.vsa.ecommerce.feature.inventory.dto.InventoryTransactionDto;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class GetInventoryTransactionsService
-        implements Service<GetInventoryTransactionsRequest, GetInventoryTransactionsResponse> {
+        implements IService<GetInventoryTransactionsRequest, GetInventoryTransactionsResponse> {
 
     private final GetInventoryTransactionsRepository repository;
 

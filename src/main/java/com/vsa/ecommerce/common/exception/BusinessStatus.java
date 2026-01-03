@@ -24,6 +24,7 @@ public enum BusinessStatus {
     CONFLICT("Conflict"),
     UNSUPPORTED_MEDIA_TYPE("Unsupported Media Type"),
     TOO_MANY_REQUESTS("Too Many Requests"),
+    USER_ALREADY_VERIFIED(400, "User already verified"),
 
     // --- Server Errors ---
     NOT_IMPLEMENTED("Not Implemented"),

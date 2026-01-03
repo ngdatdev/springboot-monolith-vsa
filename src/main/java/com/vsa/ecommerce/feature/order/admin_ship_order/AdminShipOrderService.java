@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.feature.order.admin_ship_order;
 
 import com.vsa.ecommerce.common.abstraction.EmptyResponse;
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Order;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class AdminShipOrderService implements Service<AdminShipOrderRequest, EmptyResponse> {
+public class AdminShipOrderService implements IService<AdminShipOrderRequest, EmptyResponse> {
 
     private final AdminShipOrderRepository repository;
 

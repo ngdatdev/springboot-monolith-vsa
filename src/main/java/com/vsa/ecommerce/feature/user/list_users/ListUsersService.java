@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.user.list_users;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.User;
 import com.vsa.ecommerce.feature.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ListUsersService implements Service<ListUsersRequest, UserListResponse> {
+public class ListUsersService implements IService<ListUsersRequest, UserListResponse> {
 
     private final ListUsersRepository listUsersRepository;
 

@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.order.cancel_order;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class CancelOrderService implements Service<CancelOrderRequest, CancelOrderResponse> {
+public class CancelOrderService implements IService<CancelOrderRequest, CancelOrderResponse> {
 
     private final CancelOrderRepository cancelOrderRepository;
 

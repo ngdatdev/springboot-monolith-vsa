@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.product.get_product_inventory;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Inventory;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class GetProductInventoryService implements Service<GetProductInventoryRequest, ProductInventoryDto> {
+public class GetProductInventoryService implements IService<GetProductInventoryRequest, ProductInventoryDto> {
 
     private final GetProductInventoryRepository repository;
 

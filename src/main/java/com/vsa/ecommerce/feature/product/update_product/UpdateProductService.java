@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.product.update_product;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Product;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class UpdateProductService implements Service<UpdateProductRequest, ProductDto> {
+public class UpdateProductService implements IService<UpdateProductRequest, ProductDto> {
 
     private final UpdateProductRepository repository;
 

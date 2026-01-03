@@ -30,9 +30,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         return UserPrincipal.create(user);
     }
 
-    /**
-     * Load user by ID (used after JWT validation).
-     */
     public UserDetails loadUserById(Long id) {
         log.debug("Loading user by ID: {}", id);
 

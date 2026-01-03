@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.payment.initiate_payment;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Order;
@@ -16,7 +16,7 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class InitiatePaymentService implements Service<InitiatePaymentRequest, PaymentDto> {
+public class InitiatePaymentService implements IService<InitiatePaymentRequest, PaymentDto> {
 
     private final InitiatePaymentRepository repository;
 

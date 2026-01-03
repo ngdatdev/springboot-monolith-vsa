@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.notification.get_my_notifications;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Notification;
 import com.vsa.ecommerce.feature.notification.dto.NotificationDto;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class GetMyNotificationsService implements Service<GetMyNotificationsRequest, GetMyNotificationsResponse> {
+public class GetMyNotificationsService implements IService<GetMyNotificationsRequest, GetMyNotificationsResponse> {
 
     private final GetMyNotificationsRepository repository;
 

@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.refresh_token;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.UserPrincipal;
@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class RefreshTokenService implements Service<RefreshTokenRequest, RefreshTokenResponse> {
+public class RefreshTokenService implements IService<RefreshTokenRequest, RefreshTokenResponse> {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;

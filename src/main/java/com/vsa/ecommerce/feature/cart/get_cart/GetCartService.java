@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.cart.get_cart;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class GetCartService implements Service<GetCartRequest, CartDto> {
+public class GetCartService implements IService<GetCartRequest, CartDto> {
 
     private final GetCartRepository repository;
 

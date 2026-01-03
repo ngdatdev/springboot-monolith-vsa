@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.payment.get_order_payments;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Payment;
 import com.vsa.ecommerce.feature.payment.dto.PaymentDto;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class GetOrderPaymentsService implements Service<GetOrderPaymentsRequest, GetOrderPaymentsResponse> {
+public class GetOrderPaymentsService implements IService<GetOrderPaymentsRequest, GetOrderPaymentsResponse> {
 
     private final GetOrderPaymentsRepository repository;
 

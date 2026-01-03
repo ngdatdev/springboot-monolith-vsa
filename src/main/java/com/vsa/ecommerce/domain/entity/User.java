@@ -64,13 +64,13 @@ public class User extends BaseEntity {
     /**
      * Spring Security UserDetails fields for account status.
      */
-    @Column(nullable = false)
+    @Column(name = "accountnonexpired", nullable = false)
     private Boolean accountNonExpired = true;
 
-    @Column(nullable = false)
+    @Column(name = "accountnonlocked", nullable = false)
     private Boolean accountNonLocked = true;
 
-    @Column(nullable = false)
+    @Column(name = "credentialsnonexpired", nullable = false)
     private Boolean credentialsNonExpired = true;
 
     @Column(nullable = false)

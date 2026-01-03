@@ -1,8 +1,9 @@
 package com.vsa.ecommerce.feature.auth.login;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
+import com.vsa.ecommerce.common.security.LoginAttemptService;
 import com.vsa.ecommerce.common.security.UserPrincipal;
 import com.vsa.ecommerce.common.security.jwt.JwtProperties;
 import com.vsa.ecommerce.common.security.jwt.JwtTokenProvider;
@@ -19,14 +20,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @Slf4j
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class LoginService implements Service<LoginRequest, LoginResponse> {
+public class LoginService implements IService<LoginRequest, LoginResponse> {
 
         private final AuthenticationManager authenticationManager;
         private final JwtTokenProvider jwtTokenProvider;
         private final JwtProperties jwtProperties;
         private final AuthMapper authMapper;
         private final org.springframework.data.redis.core.RedisTemplate<String, String> redisTemplate;
-        private final com.vsa.ecommerce.common.security.LoginAttemptService loginAttemptService;
+        private final LoginAttemptService loginAttemptService;
 
         @Override
         public LoginResponse execute(LoginRequest request) {

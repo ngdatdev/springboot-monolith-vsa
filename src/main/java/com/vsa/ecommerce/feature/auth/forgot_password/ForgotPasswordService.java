@@ -1,9 +1,9 @@
 package com.vsa.ecommerce.feature.auth.forgot_password;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.mail.MailService;
 import com.vsa.ecommerce.common.otp.OtpService;
-import com.vsa.ecommerce.feature.auth.common.AuthProperties;
+import com.vsa.ecommerce.config.webapi.WebProperties;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,12 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class ForgotPasswordService implements Service<ForgotPasswordRequest, ForgotPasswordResponse> {
+public class ForgotPasswordService implements IService<ForgotPasswordRequest, ForgotPasswordResponse> {
 
     private final ForgotPasswordRepository repository;
     private final OtpService otpService;
     private final MailService mailService;
-    private final AuthProperties authProperties;
+    private final WebProperties authProperties;
 
     @Override
     public ForgotPasswordResponse execute(ForgotPasswordRequest request) {

@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.product.create_product;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Product;
 import com.vsa.ecommerce.feature.product.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class CreateProductService implements Service<CreateProductRequest, ProductDto> {
+public class CreateProductService implements IService<CreateProductRequest, ProductDto> {
 
     private final CreateProductRepository repository;
 

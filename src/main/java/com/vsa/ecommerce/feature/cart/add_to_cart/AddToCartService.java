@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.cart.add_to_cart;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class AddToCartService implements Service<AddToCartRequest, CartDto> {
+public class AddToCartService implements IService<AddToCartRequest, CartDto> {
 
     private final AddToCartRepository repository;
 

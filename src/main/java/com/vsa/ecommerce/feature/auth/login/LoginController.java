@@ -14,11 +14,8 @@ import com.vsa.ecommerce.common.ratelimit.RateLimit;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-/**
- * Authentication Controller.
- * 
- * Endpoints:
- * - POST /api/auth/login - Login with email/password
+/*
+ * Controller for login requests.
  */
 @Slf4j
 @RestController
@@ -29,12 +26,6 @@ public class LoginController extends BaseController {
 
     private final LoginService loginService;
 
-    /**
-     * Login endpoint.
-     * 
-     * @param request Login credentials (email + password)
-     * @return JWT token and user information
-     */
     @RateLimit(maxRequests = 5)
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> handle(@Valid @RequestBody LoginRequest request) {

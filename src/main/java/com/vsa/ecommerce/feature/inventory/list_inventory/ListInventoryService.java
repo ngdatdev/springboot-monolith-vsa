@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.inventory.list_inventory;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Inventory;
 import com.vsa.ecommerce.feature.inventory.dto.InventoryDto;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ListInventoryService implements Service<ListInventoryRequest, ListInventoryResponse> {
+public class ListInventoryService implements IService<ListInventoryRequest, ListInventoryResponse> {
 
     private final ListInventoryRepository repository;
 

@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.feature.auth.logout;
 
 import com.vsa.ecommerce.common.abstraction.EmptyResponse;
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.TokenBlacklist;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class LogoutService implements Service<LogoutRequest, EmptyResponse> {
+public class LogoutService implements IService<LogoutRequest, EmptyResponse> {
 
     private final LogoutRepository repository;
 

@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.user.get_user;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.User;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class GetUserService implements Service<UserIdRequest, UserDto> {
+public class GetUserService implements IService<UserIdRequest, UserDto> {
 
     private final GetUserRepository getUserRepository;
 

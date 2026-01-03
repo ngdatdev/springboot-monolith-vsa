@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.cart.checkout_cart;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class CheckoutCartService implements Service<CheckoutCartRequest, CheckoutCartResponse> {
+public class CheckoutCartService implements IService<CheckoutCartRequest, CheckoutCartResponse> {
 
     private final CheckoutCartRepository cartRepository;
     private final CheckoutCartOrderRepository orderRepository;

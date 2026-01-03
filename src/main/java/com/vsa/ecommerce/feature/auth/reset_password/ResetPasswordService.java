@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.reset_password;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.otp.OtpService;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class ResetPasswordService implements Service<ResetPasswordRequest, ResetPasswordResponse> {
+public class ResetPasswordService implements IService<ResetPasswordRequest, ResetPasswordResponse> {
 
     private final ResetPasswordRepository repository;
     private final OtpService otpService;

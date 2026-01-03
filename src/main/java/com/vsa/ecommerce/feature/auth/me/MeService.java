@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.me;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class MeService implements Service<MeRequest, MeResponse> {
+public class MeService implements IService<MeRequest, MeResponse> {
 
         private final MeRepository meRepository;
         private final AuthMapper authMapper;

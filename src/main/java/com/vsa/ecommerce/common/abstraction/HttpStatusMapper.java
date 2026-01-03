@@ -35,6 +35,7 @@ public class HttpStatusMapper {
         STATUS_MAP.put(BusinessStatus.CONFLICT, HttpStatus.CONFLICT);
         STATUS_MAP.put(BusinessStatus.UNSUPPORTED_MEDIA_TYPE, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
         STATUS_MAP.put(BusinessStatus.TOO_MANY_REQUESTS, HttpStatus.TOO_MANY_REQUESTS);
+        STATUS_MAP.put(BusinessStatus.USER_ALREADY_VERIFIED, HttpStatus.BAD_REQUEST);
 
         // --- Server Errors ---
         STATUS_MAP.put(BusinessStatus.NOT_IMPLEMENTED, HttpStatus.NOT_IMPLEMENTED);

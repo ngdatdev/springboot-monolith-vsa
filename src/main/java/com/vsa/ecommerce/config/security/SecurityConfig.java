@@ -61,12 +61,7 @@ public class SecurityConfig {
                                 .authorizeHttpRequests(auth -> auth
                                                 // Public endpoints (no authentication required)
                                                 .requestMatchers(
-                                                                "/api/auth/login",
-                                                                "/api/auth/register",
-                                                                "/api/auth/forgot-password",
-                                                                "/api/auth/reset-password",
-                                                                "/api/auth/refresh-token",
-                                                                "/api/auth/verify-email",
+                                                                "/api/auth/**",
                                                                 "/v3/api-docs/**",
                                                                 "/swagger-ui/**",
                                                                 "/swagger-ui.html")

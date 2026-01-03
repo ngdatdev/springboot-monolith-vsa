@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.cart.update_cart_item;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class UpdateCartItemService implements Service<UpdateCartItemRequest, CartDto> {
+public class UpdateCartItemService implements IService<UpdateCartItemRequest, CartDto> {
 
     private final UpdateCartItemRepository repository;
 

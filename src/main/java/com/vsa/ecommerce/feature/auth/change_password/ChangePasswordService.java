@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.auth.change_password;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class ChangePasswordService implements Service<ChangePasswordRequest, ChangePasswordResponse> {
+public class ChangePasswordService implements IService<ChangePasswordRequest, ChangePasswordResponse> {
 
     private final ChangePasswordRepository changePasswordRepository;
     private final PasswordEncoder passwordEncoder;

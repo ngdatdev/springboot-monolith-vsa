@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.user.update_user;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.User;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class UpdateUserService implements Service<UpdateUserService.Request, UserDto> {
+public class UpdateUserService implements IService<UpdateUserService.Request, UserDto> {
 
     private final UpdateUserRepository updateUserRepository;
 

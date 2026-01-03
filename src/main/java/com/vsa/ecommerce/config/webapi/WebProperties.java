@@ -1,4 +1,4 @@
-package com.vsa.ecommerce.feature.auth.common;
+package com.vsa.ecommerce.config.webapi;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "app.auth")
 @Getter
 @Setter
-public class AuthProperties {
+public class WebProperties {
 
     /**
      * Frontend base URL for links (e.g., http://localhost:3000).

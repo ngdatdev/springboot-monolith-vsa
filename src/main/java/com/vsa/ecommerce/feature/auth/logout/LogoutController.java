@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/*
+ * Controller for logout requests.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
-@Tag(name = "Auth")
+@Tag(name = "Authentication", description = "Auth endpoints")
 public class LogoutController extends BaseController {
 
     private final LogoutService service;

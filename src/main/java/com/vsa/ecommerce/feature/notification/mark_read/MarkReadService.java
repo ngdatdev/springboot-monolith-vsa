@@ -1,7 +1,7 @@
 package com.vsa.ecommerce.feature.notification.mark_read;
 
 import com.vsa.ecommerce.common.abstraction.EmptyResponse;
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Notification;
@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class MarkReadService implements Service<MarkReadRequest, EmptyResponse> {
+public class MarkReadService implements IService<MarkReadRequest, EmptyResponse> {
 
     private final MarkReadRepository repository;
 

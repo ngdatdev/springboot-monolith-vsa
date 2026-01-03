@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.product.get_product;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Product;
@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class GetProductService implements Service<GetProductRequest, ProductDto> {
+public class GetProductService implements IService<GetProductRequest, ProductDto> {
 
     private final GetProductRepository repository;
 

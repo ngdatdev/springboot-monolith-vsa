@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.order.get_order;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.Order;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class GetOrderService implements Service<GetOrderRequest, OrderDto> {
+public class GetOrderService implements IService<GetOrderRequest, OrderDto> {
 
     @PersistenceContext
     private EntityManager entityManager;

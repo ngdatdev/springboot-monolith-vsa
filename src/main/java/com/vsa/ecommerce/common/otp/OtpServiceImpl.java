@@ -34,25 +34,16 @@ public class OtpServiceImpl implements OtpService {
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final int DEFAULT_OTP_LENGTH = 6;
     private static final int MAX_VERIFICATION_ATTEMPTS = 5;
+    private static final int OTP_TTL_MINUTES = 5;
 
     /**
-     * Generate and store an OTP with default 5-minute expiration.
+     * Generate and store an OTP with default expiration.
      *
-     * @param identifier Unique identifier (e.g., email, user ID)
+     * @param identifier Unique identifier
      * @return Generated OTP code
      */
     public String generateOtp(String identifier) {
-        return generateOtp(identifier, Duration.ofMinutes(5));
-    }
-
-    /**
-     * Generate and store an OTP with custom expiration.
-     *
-     * @param identifier Unique identifier
-     * @param ttl        Time-to-live duration
-     * @return Generated OTP code
-     */
-    public String generateOtp(String identifier, Duration ttl) {
+        var ttl = Duration.ofMinutes(OTP_TTL_MINUTES);
         if (identifier == null || identifier.isBlank()) {
             throw new IllegalArgumentException("Identifier cannot be null or empty");
         }
@@ -62,19 +53,23 @@ public class OtpServiceImpl implements OtpService {
         String attemptKey = buildAttemptKey(identifier);
 
         try {
-            // Store OTP with TTL
-            redisTemplate.opsForValue().set(key, otp, ttl);
+            saveOtp(key, otp, ttl, attemptKey);
 
-            // Reset attempt counter
-            redisTemplate.delete(attemptKey);
-
-            log.info("OTP generated for: {} (expires in {} seconds)", identifier, ttl.getSeconds());
+            log.info("OTP generated for: {} : {} (expires in {} seconds)", identifier, otp, ttl.getSeconds());
             return otp;
 
         } catch (Exception e) {
             log.error("Error generating OTP for: {}", identifier, e);
             throw new RuntimeException("Failed to generate OTP", e);
         }
+    }
+
+    private void saveOtp(String key, String otp, Duration ttl, String attemptKey) {
+        // Store OTP with TTL
+        redisTemplate.opsForValue().set(key, otp, ttl);
+
+        // Reset attempt counter
+        redisTemplate.delete(attemptKey);
     }
 
     /**

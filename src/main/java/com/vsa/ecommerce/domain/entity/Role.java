@@ -49,6 +49,14 @@ public class Role extends BaseEntity {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
+    /**
+     * Many-to-many relationship with Permission.
+     * A role can have multiple permissions.
+     */
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "role_permissions", joinColumns = @JoinColumn(name = "role_id"), inverseJoinColumns = @JoinColumn(name = "permission_id"))
+    private Set<Permission> permissions = new HashSet<>();
+
     @Version
     private Long version;
 

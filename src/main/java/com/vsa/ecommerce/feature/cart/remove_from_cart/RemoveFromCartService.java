@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.cart.remove_from_cart;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class RemoveFromCartService implements Service<RemoveFromCartRequest, CartDto> {
+public class RemoveFromCartService implements IService<RemoveFromCartRequest, CartDto> {
 
     private final RemoveFromCartRepository repository;
 

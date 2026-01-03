@@ -1,6 +1,6 @@
 package com.vsa.ecommerce.feature.product.list_products;
 
-import com.vsa.ecommerce.common.abstraction.Service;
+import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Product;
 import com.vsa.ecommerce.feature.product.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
-public class ListProductsService implements Service<ListProductsRequest, ListProductsResponse> {
+public class ListProductsService implements IService<ListProductsRequest, ListProductsResponse> {
 
     private final ListProductsRepository repository;
 
