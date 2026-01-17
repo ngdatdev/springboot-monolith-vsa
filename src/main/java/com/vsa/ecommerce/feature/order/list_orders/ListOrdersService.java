@@ -5,8 +5,6 @@ import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.common.security.SecurityUtils;
 import com.vsa.ecommerce.domain.entity.Order;
-import com.vsa.ecommerce.feature.order.dto.OrderDto;
-import com.vsa.ecommerce.feature.order.dto.OrderItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,19 +26,19 @@ public class ListOrdersService implements IService<ListOrdersRequest, ListOrders
 
         List<Order> orders = listOrdersRepository.findByUserId(currentUserId, request.getPage(), request.getSize());
 
-        List<OrderDto> dtos = orders.stream().map(this::mapToDto).collect(Collectors.toList());
-        return ListOrdersResponse.builder().orders(dtos).build();
+        List<OrderItem> items = orders.stream().map(this::mapToItem).collect(Collectors.toList());
+        return ListOrdersResponse.builder().orders(items).build();
     }
 
-    private OrderDto mapToDto(Order order) {
-        return OrderDto.builder()
+    private OrderItem mapToItem(Order order) {
+        return OrderItem.builder()
                 .id(order.getId())
                 .userId(order.getUser().getId())
                 .status(order.getStatus())
                 .totalAmount(order.getTotalAmount())
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
-                .items(order.getItems().stream().map(item -> OrderItemDto.builder()
+                .items(order.getItems().stream().map(item -> OrderItem.OrderItemDetail.builder()
                         .id(item.getId())
                         .productId(item.getProduct().getId())
                         .productName(item.getProductNameSnapshot())

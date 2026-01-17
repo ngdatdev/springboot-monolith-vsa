@@ -1,14 +1,15 @@
 package com.vsa.ecommerce.common.idempotent;
 
+import com.vsa.ecommerce.common.redis.KeyConvention;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
+import com.vsa.ecommerce.common.redis.BaseRedisService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,10 +23,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class IdempotentAspect {
 
-    private final RedisTemplate<String, Object> redisTemplate;
+    private final BaseRedisService redisService;
+    private final KeyConvention keyConvention;
 
-    @Before("@annotation(idempotent)")
-    public void validateIdempotency(JoinPoint joinPoint, Idempotent idempotent) {
+    @Around("@annotation(idempotent)")
+    public Object validateIdempotency(ProceedingJoinPoint joinPoint, Idempotent idempotent) throws Throwable {
         HttpServletRequest request = getRequest()
                 .orElseThrow(
                         () -> new BusinessException(BusinessStatus.INTERNAL_SERVER_ERROR, "Request context not found"));
@@ -33,31 +35,43 @@ public class IdempotentAspect {
         String idempotencyKey = request.getHeader(idempotent.headerName());
 
         if (idempotencyKey == null || idempotencyKey.isBlank()) {
-            // If the key is missing, we might want to throw an error or skip.
-            // In a strict API, it should be required for idempotent endpoints.
-            log.warn("Missing idempotency key for method: {}", joinPoint.getSignature().toShortString());
-            // throw new BusinessException(BusinessStatus.PARAM_ERROR, "Idempotency key is
-            // required");
-            return;
+            log.trace("Missing idempotency key for method: {}, skipping check",
+                    joinPoint.getSignature().toShortString());
+            return joinPoint.proceed();
         }
 
-        String redisKey = idempotent.keyPrefix() + idempotencyKey;
+        String redisKey = keyConvention.buildKey(KeyConvention.RESOURCE_IDEMPOTENCY,
+                idempotent.keyPrefix() + idempotencyKey);
 
-        // Try to set the key in Redis (pseudo-lock)
-        // If it returns false, the key already exists (request is being processed or
-        // was processed)
-        Boolean success = redisTemplate.opsForValue().setIfAbsent(redisKey, "processing",
+        // 1. Try to set the key in Redis (processing lock)
+        boolean success = redisService.setIfAbsent(redisKey, "processing",
                 Duration.of(idempotent.expireTime(), idempotent.unit().toChronoUnit()));
 
-        if (Boolean.FALSE.equals(success)) {
+        if (!success) {
             log.warn("Duplicate request detected for key: {}", idempotencyKey);
             throw new BusinessException(BusinessStatus.CONFLICT,
                     "Request is already being processed or has been completed.");
         }
 
-        // Note: For full implementation with returnCachedResponse=true,
-        // we would need an @Around advice to capture the result and store it in Redis.
-        // For now, we provide the blocking mechanism.
+        try {
+            // 2. Execute the actual method
+            Object result = joinPoint.proceed();
+
+            // 3. Optional: Map result here if you want to cache the response for replay
+            // For now, we just keep the "processing" (or could change to "completed")
+            return result;
+
+        } catch (BusinessException e) {
+            // Business errors usually mean we should keep the idempotency key
+            // because the request was "completed" (even if with failure)
+            throw e;
+        } catch (Throwable e) {
+            // Internal errors/System errors: Clear the key so the user can retry
+            // immediately
+            log.error("Idempotent request failed with system error, clearing key: {}", redisKey);
+            redisService.delete(redisKey);
+            throw e;
+        }
     }
 
     private Optional<HttpServletRequest> getRequest() {

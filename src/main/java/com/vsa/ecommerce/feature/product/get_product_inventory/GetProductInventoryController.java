@@ -1,7 +1,6 @@
 package com.vsa.ecommerce.feature.product.get_product_inventory;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
-import com.vsa.ecommerce.feature.product.dto.ProductInventoryDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class GetProductInventoryController extends BaseController {
 
     @GetMapping("/{id}/inventory")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductInventoryDto> getProductInventory(@PathVariable Long id) {
+    public ResponseEntity<GetProductInventoryResponse> getProductInventory(@PathVariable Long id) {
         return ResponseEntity.ok(service.execute(GetProductInventoryRequest.builder().productId(id).build()));
     }
 }

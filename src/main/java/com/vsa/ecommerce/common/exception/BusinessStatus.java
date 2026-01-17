@@ -50,17 +50,15 @@ public enum BusinessStatus {
     RESOURCE_NOT_FOUND(404, "Resource not found"),
     CART_EMPTY(400, "Cart is empty");
 
-    private final int httpStatus; // Added httpStatus field
+    private final int httpStatus;
     private final String message;
 
-    // Modified constructor to accept httpStatus
     BusinessStatus(int httpStatus, String message) {
         this.httpStatus = httpStatus;
         this.message = message;
     }
 
-    // Overloaded constructor for existing enums without httpStatus
     BusinessStatus(String message) {
-        this(0, message); // Default httpStatus to 0 or another appropriate value
+        this(0, message);
     }
 }

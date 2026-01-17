@@ -1,7 +1,6 @@
 package com.vsa.ecommerce.feature.product.update_product;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
-import com.vsa.ecommerce.feature.product.dto.ProductDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +21,7 @@ public class UpdateProductController extends BaseController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequest request) {
+    public ResponseEntity<UpdateProductResponse> updateProduct(@PathVariable Long id, @RequestBody UpdateProductRequest request) {
         request.setProductId(id);
         return ResponseEntity.ok(service.execute(request));
     }

@@ -52,6 +52,13 @@ public interface LocalCacheService {
     void evict(String key);
 
     /**
+     * Evict all entries from L1 cache that match a pattern.
+     *
+     * @param pattern Cache key pattern to evict
+     */
+    void evictPattern(String pattern);
+
+    /**
      * Evict all entries from L1 cache.
      */
     void evictAll();

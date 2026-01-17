@@ -1,19 +1,22 @@
 package com.vsa.ecommerce.feature.user.update_user_status;
 
 import com.vsa.ecommerce.common.abstraction.IService;
+import com.vsa.ecommerce.common.redis.KeyConvention;
+import com.vsa.ecommerce.common.cache.hybrid.HybridCacheService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.User;
-import com.vsa.ecommerce.feature.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class UpdateUserStatusService implements IService<UpdateUserStatusService.Request, UserDto> {
+public class UpdateUserStatusService implements IService<UpdateUserStatusService.Request, UpdateUserStatusResponse> {
 
     private final UpdateUserStatusRepository updateUserStatusRepository;
+    private final HybridCacheService cacheService;
+    private final KeyConvention keyConvention;
 
     @lombok.Data
     @lombok.Builder
@@ -24,17 +27,21 @@ public class UpdateUserStatusService implements IService<UpdateUserStatusService
 
     @Override
     @Transactional
-    public UserDto execute(Request request) {
+    public UpdateUserStatusResponse execute(Request request) {
         User user = updateUserStatusRepository.findById(request.getId())
                 .orElseThrow(() -> new BusinessException(BusinessStatus.USER_NOT_FOUND));
 
         user.setEnabled(request.getStatusRequest().getActive());
         updateUserStatusRepository.save(user);
-        return mapToDto(user);
+
+        // Evict user cache
+        cacheService.evict(keyConvention.buildKey(KeyConvention.RESOURCE_USER, user.getId().toString()));
+
+        return mapToResponse(user);
     }
 
-    private UserDto mapToDto(User user) {
-        return UserDto.builder()
+    private UpdateUserStatusResponse mapToResponse(User user) {
+        return UpdateUserStatusResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .firstName(user.getFirstName())

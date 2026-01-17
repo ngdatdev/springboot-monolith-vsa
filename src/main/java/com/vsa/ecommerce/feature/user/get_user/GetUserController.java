@@ -1,7 +1,6 @@
 package com.vsa.ecommerce.feature.user.get_user;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
-import com.vsa.ecommerce.feature.user.dto.UserDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class GetUserController extends BaseController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or @securityUtils.isCurrentUser(#id)")
-    public ResponseEntity<UserDto> getUser(@PathVariable Long id) {
-        return ResponseEntity.ok(getUserService.execute(new com.vsa.ecommerce.feature.user.dto.UserIdRequest(id)));
+    public ResponseEntity<GetUserResponse> getUser(@PathVariable Long id) {
+        return ResponseEntity.ok(getUserService.execute(new GetUserRequest(id)));
     }
 }

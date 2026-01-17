@@ -89,25 +89,25 @@ CacheKeyConvention.RESOURCE_RATE_LIMIT = "rate-limit"
 ### Example 1: User Profile Caching
 
 ```java
-import static com.vsa.ecommerce.common.cache.CacheKeyConvention.*;
+import static com.vsa.ecommerce.common.redis.KeyConvention.*;
 
 @Service
 public class UserService {
     private final HybridCacheManager cache;
     private final CacheKeyConvention keyConvention;
-    
+
     public UserDto getUser(Long userId) {
         // Use constant instead of hardcoded string
         String key = keyConvention.buildKey(RESOURCE_USER, userId.toString());
-        
-        return cache.getOrCompute(key, UserDto.class, 
-            () -> loadUserFromDatabase(userId));
+
+        return cache.getOrCompute(key, UserDto.class,
+                () -> loadUserFromDatabase(userId));
     }
-    
+
     public void updateUser(Long userId, UserDto dto) {
         // Update database
         userRepository.update(userId, dto);
-        
+
         // Invalidate using constant
         String key = keyConvention.buildKey(RESOURCE_USER, userId.toString());
         cache.evict(key);
@@ -118,25 +118,25 @@ public class UserService {
 ### Example 2: Product Inventory Caching
 
 ```java
-import static com.vsa.ecommerce.common.cache.CacheKeyConvention.*;
+import static com.vsa.ecommerce.common.redis.KeyConvention.*;
 
 @Service
 public class InventoryService {
-    
+
     public InventoryDto getProductInventory(Long productId) {
         String key = keyConvention.buildKey(
-            RESOURCE_PRODUCT_INVENTORY, 
-            productId.toString()
+                RESOURCE_PRODUCT_INVENTORY,
+                productId.toString()
         );
-        
+
         return cache.getOrCompute(key, InventoryDto.class,
-            () -> calculateInventory(productId));
+                () -> calculateInventory(productId));
     }
-    
+
     public void updateInventory(Long productId, int quantity) {
         // Update inventory
         inventoryRepository.adjustStock(productId, quantity);
-        
+
         // Invalidate both product and inventory caches
         cache.evict(keyConvention.buildKey(RESOURCE_PRODUCT, productId.toString()));
         cache.evict(keyConvention.buildKey(RESOURCE_PRODUCT_INVENTORY, productId.toString()));
@@ -147,30 +147,30 @@ public class InventoryService {
 ### Example 3: User's Orders (Composite Key)
 
 ```java
-import static com.vsa.ecommerce.common.cache.CacheKeyConvention.*;
+import static com.vsa.ecommerce.common.redis.KeyConvention.*;
 
 @Service
 public class OrderService {
-    
+
     public List<OrderDto> getUserOrders(Long userId) {
         // Use composite key for list of orders
         String key = keyConvention.buildKey(
-            RESOURCE_USER_ORDERS,
-            userId.toString()
+                RESOURCE_USER_ORDERS,
+                userId.toString()
         );
-        
+
         return cache.getOrCompute(key, OrderListDto.class,
-            () -> orderRepository.findByUserId(userId))
-            .getOrders();
+                        () -> orderRepository.findByUserId(userId))
+                .getOrders();
     }
-    
+
     public void createOrder(Long userId, OrderDto order) {
         orderRepository.save(order);
-        
+
         // Invalidate user's order list
         String userOrdersKey = keyConvention.buildKey(
-            RESOURCE_USER_ORDERS, 
-            userId.toString()
+                RESOURCE_USER_ORDERS,
+                userId.toString()
         );
         cache.evict(userOrdersKey);
     }
@@ -180,29 +180,29 @@ public class OrderService {
 ### Example 4: Multi-Tenant Permission Cache
 
 ```java
-import static com.vsa.ecommerce.common.cache.CacheKeyConvention.*;
+import static com.vsa.ecommerce.common.redis.KeyConvention.*;
 
 @Service
 public class PermissionService {
-    
+
     public Set<String> getUserPermissions(String tenantId, Long userId) {
         // Build key with tenant context
         String key = keyConvention.buildKey(
-            RESOURCE_PERMISSION,
-            userId.toString(),
-            tenantId  // Tenant ID for multi-tenancy
+                RESOURCE_PERMISSION,
+                userId.toString(),
+                tenantId  // Tenant ID for multi-tenancy
         );
-        
+
         return cache.getOrCompute(key, PermissionSet.class,
-            () -> loadPermissions(tenantId, userId))
-            .permissions();
+                        () -> loadPermissions(tenantId, userId))
+                .permissions();
     }
-    
+
     public void invalidateAllPermissionsForTenant(String tenantId) {
         // Use pattern to invalidate all permissions in tenant
         String pattern = keyConvention.buildTenantPattern(
-            RESOURCE_PERMISSION, 
-            tenantId
+                RESOURCE_PERMISSION,
+                tenantId
         );
         cache.evictPattern(pattern);
     }
@@ -212,19 +212,19 @@ public class PermissionService {
 ### Example 5: Order Summary Report
 
 ```java
-import static com.vsa.ecommerce.common.cache.CacheKeyConvention.*;
+import static com.vsa.ecommerce.common.redis.KeyConvention.*;
 
 @Service
 public class ReportingService {
-    
+
     public OrderSummaryDto getMonthlyOrderSummary(String month) {
         String key = keyConvention.buildKey(
-            RESOURCE_ORDER_SUMMARY,
-            "monthly-" + month  // e.g., "monthly-2024-12"
+                RESOURCE_ORDER_SUMMARY,
+                "monthly-" + month  // e.g., "monthly-2024-12"
         );
-        
+
         return cache.getOrCompute(key, OrderSummaryDto.class,
-            () -> calculateMonthlyOrders(month));
+                () -> calculateMonthlyOrders(month));
     }
 }
 ```
@@ -237,8 +237,9 @@ String key = keyConvention.buildKey("user", userId.toString());  // ❌ Magic st
 ```
 
 **After (Recommended)**:
+
 ```java
-import static com.vsa.ecommerce.common.cache.CacheKeyConvention.*;
+import static com.vsa.ecommerce.common.redis.KeyConvention.*;
 
 String key = keyConvention.buildKey(RESOURCE_USER, userId.toString());  // ✅ Type-safe constant
 ```
@@ -275,8 +276,9 @@ public static final String RESOURCE_MY_ENTITY = "my-entity";
 ```
 
 2. Use in services:
+
 ```java
-import static com.vsa.ecommerce.common.cache.CacheKeyConvention.*;
+
 
 String key = keyConvention.buildKey(RESOURCE_MY_ENTITY, id.toString());
 ```

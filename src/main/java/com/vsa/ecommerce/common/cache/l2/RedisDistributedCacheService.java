@@ -2,39 +2,25 @@ package com.vsa.ecommerce.common.cache.l2;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vsa.ecommerce.common.redis.BaseRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Redis-based implementation of L2 (Distributed) cache.
- * <p>
- * Features:
- * - JSON serialization for cross-platform compatibility
- * - Configurable TTL per key or default
- * - Pattern-based bulk operations
- * - Thread-safe operations
- * <p>
- * Performance:
- * - Latency: 5-10ms (network I/O)
- * - Throughput: Tens of thousands of ops/sec per instance
- * <p>
- * Configuration:
- * - cache.redis.ttl-minutes: Default time-to-live for cache entries
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RedisDistributedCacheService implements RedisCacheService {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final BaseRedisService redisService;
     private final ObjectMapper objectMapper;
 
     @Value("${cache.redis.ttl-minutes:5}")
@@ -43,7 +29,7 @@ public class RedisDistributedCacheService implements RedisCacheService {
     @Override
     public <T> Optional<T> get(String key, Class<T> type) {
         try {
-            String json = redisTemplate.opsForValue().get(key);
+            String json = (String) redisService.get(key);
             if (json == null) {
                 log.trace("L2 Cache MISS: {}", key);
                 return Optional.empty();
@@ -77,7 +63,7 @@ public class RedisDistributedCacheService implements RedisCacheService {
 
         try {
             String json = objectMapper.writeValueAsString(value);
-            redisTemplate.opsForValue().set(key, json, ttl);
+            redisService.set(key, json, ttl);
             log.trace("L2 Cache PUT: {} (TTL: {})", key, ttl);
         } catch (JsonProcessingException e) {
             log.error("Error serializing value for L2 cache key: {}", key, e);
@@ -92,8 +78,8 @@ public class RedisDistributedCacheService implements RedisCacheService {
             return;
         }
 
-        Boolean deleted = redisTemplate.delete(key);
-        log.debug("L2 Cache EVICT: {} (deleted: {})", key, deleted);
+        redisService.delete(key);
+        log.debug("L2 Cache EVICT: {}", key);
     }
 
     @Override
@@ -104,14 +90,14 @@ public class RedisDistributedCacheService implements RedisCacheService {
         }
 
         try {
-            Set<String> keys = redisTemplate.keys(pattern);
+            Set<String> keys = redisService.keys(pattern);
             if (keys == null || keys.isEmpty()) {
                 log.debug("L2 Cache EVICT PATTERN: {} (no keys found)", pattern);
                 return 0;
             }
 
-            Long deleted = redisTemplate.delete(keys);
-            long count = deleted != null ? deleted : 0;
+            redisService.delete(keys);
+            long count = keys.size();
             log.info("L2 Cache EVICT PATTERN: {} ({} keys deleted)", pattern, count);
             return count;
 
@@ -124,7 +110,7 @@ public class RedisDistributedCacheService implements RedisCacheService {
     @Override
     public long getKeysCount(String pattern) {
         try {
-            Set<String> keys = redisTemplate.keys(pattern);
+            Set<String> keys = redisService.keys(pattern);
             return keys != null ? keys.size() : 0;
         } catch (Exception e) {
             log.error("Error counting keys for pattern: {}", pattern, e);
@@ -135,7 +121,7 @@ public class RedisDistributedCacheService implements RedisCacheService {
     @Override
     public Set<String> getKeys(String pattern) {
         try {
-            Set<String> keys = redisTemplate.keys(pattern);
+            Set<String> keys = redisService.keys(pattern);
             log.debug("L2 Cache GET KEYS: {} ({} keys found)", pattern, keys != null ? keys.size() : 0);
             return keys != null ? keys : Set.of();
         } catch (Exception e) {
@@ -151,8 +137,7 @@ public class RedisDistributedCacheService implements RedisCacheService {
         }
 
         try {
-            Boolean exists = redisTemplate.hasKey(key);
-            return exists != null && exists;
+            return redisService.hasKey(key);
         } catch (Exception e) {
             log.warn("Error checking existence for key: {}", key, e);
             return false;
@@ -166,7 +151,7 @@ public class RedisDistributedCacheService implements RedisCacheService {
         }
 
         try {
-            Long ttl = redisTemplate.getExpire(key, TimeUnit.SECONDS);
+            Long ttl = redisService.getExpire(key);
             return ttl != null ? ttl : -1;
         } catch (Exception e) {
             log.warn("Error getting TTL for key: {}", key, e);

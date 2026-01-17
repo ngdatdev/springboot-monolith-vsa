@@ -1,14 +1,14 @@
 package com.vsa.ecommerce.common.otp;
 
+import com.vsa.ecommerce.common.redis.KeyConvention;
+import com.vsa.ecommerce.common.redis.BaseRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.time.Duration;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 /**
  * One-Time Password (OTP) and temporary token management service using Redis.
@@ -30,18 +30,15 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class OtpServiceImpl implements OtpService {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final BaseRedisService redisService;
+    private final KeyConvention keyConvention;
+
     private static final SecureRandom RANDOM = new SecureRandom();
     private static final int DEFAULT_OTP_LENGTH = 6;
     private static final int MAX_VERIFICATION_ATTEMPTS = 5;
     private static final int OTP_TTL_MINUTES = 5;
 
-    /**
-     * Generate and store an OTP with default expiration.
-     *
-     * @param identifier Unique identifier
-     * @return Generated OTP code
-     */
+    @Override
     public String generateOtp(String identifier) {
         var ttl = Duration.ofMinutes(OTP_TTL_MINUTES);
         if (identifier == null || identifier.isBlank()) {
@@ -49,8 +46,8 @@ public class OtpServiceImpl implements OtpService {
         }
 
         String otp = generateRandomOtp(DEFAULT_OTP_LENGTH);
-        String key = buildOtpKey(identifier);
-        String attemptKey = buildAttemptKey(identifier);
+        String key = keyConvention.buildKey(KeyConvention.RESOURCE_OTP, identifier);
+        String attemptKey = keyConvention.buildKey(KeyConvention.RESOURCE_OTP_ATTEMPT, identifier);
 
         try {
             saveOtp(key, otp, ttl, attemptKey);
@@ -64,28 +61,14 @@ public class OtpServiceImpl implements OtpService {
         }
     }
 
-    private void saveOtp(String key, String otp, Duration ttl, String attemptKey) {
-        // Store OTP with TTL
-        redisTemplate.opsForValue().set(key, otp, ttl);
-
-        // Reset attempt counter
-        redisTemplate.delete(attemptKey);
-    }
-
-    /**
-     * Verify an OTP code.
-     *
-     * @param identifier Unique identifier
-     * @param code       OTP code to verify
-     * @return true if code is valid, false otherwise
-     */
+    @Override
     public boolean validateOtp(String identifier, String code) {
         if (identifier == null || identifier.isBlank() || code == null || code.isBlank()) {
             return false;
         }
 
-        String key = buildOtpKey(identifier);
-        String attemptKey = buildAttemptKey(identifier);
+        String key = keyConvention.buildKey(KeyConvention.RESOURCE_OTP, identifier);
+        String attemptKey = keyConvention.buildKey(KeyConvention.RESOURCE_OTP_ATTEMPT, identifier);
 
         try {
             // Check attempt limit
@@ -95,10 +78,10 @@ public class OtpServiceImpl implements OtpService {
             }
 
             // Get stored OTP
-            String storedOtp = redisTemplate.opsForValue().get(key);
+            String storedOtp = (String) redisService.get(key);
 
             if (storedOtp == null) {
-                log.debug("OTP not found or expired for: {}", identifier);
+                log.warn("OTP not found or expired for: {}", identifier);
                 incrementAttempt(attemptKey);
                 return false;
             }
@@ -108,8 +91,8 @@ public class OtpServiceImpl implements OtpService {
 
             if (isValid) {
                 // Delete OTP after successful verification
-                redisTemplate.delete(key);
-                redisTemplate.delete(attemptKey);
+                redisService.delete(key);
+                redisService.delete(attemptKey);
                 log.info("OTP verified successfully for: {}", identifier);
             } else {
                 incrementAttempt(attemptKey);
@@ -130,15 +113,16 @@ public class OtpServiceImpl implements OtpService {
      * @param identifier Unique identifier
      * @return Optional containing remaining seconds, empty if OTP doesn't exist
      */
+    @Override
     public Optional<Long> getRemainingTtl(String identifier) {
         if (identifier == null || identifier.isBlank()) {
             return Optional.empty();
         }
 
-        String key = buildOtpKey(identifier);
+        String key = keyConvention.buildKey(KeyConvention.RESOURCE_OTP, identifier);
 
         try {
-            Long ttl = redisTemplate.getExpire(key, TimeUnit.SECONDS);
+            Long ttl = redisService.getExpire(key);
             return (ttl != null && ttl > 0) ? Optional.of(ttl) : Optional.empty();
         } catch (Exception e) {
             log.error("Error getting OTP TTL for: {}", identifier, e);
@@ -151,14 +135,20 @@ public class OtpServiceImpl implements OtpService {
      *
      * @param identifier Unique identifier
      */
+    @Override
     public void invalidateOtp(String identifier) {
         if (identifier == null || identifier.isBlank()) {
             return;
         }
 
-        String key = buildOtpKey(identifier);
-        redisTemplate.delete(key);
+        String key = keyConvention.buildKey(KeyConvention.RESOURCE_OTP, identifier);
+        redisService.delete(key);
         log.info("OTP invalidated for: {}", identifier);
+    }
+
+    private void saveOtp(String key, String otp, Duration ttl, String attemptKey) {
+        redisService.set(key, otp, ttl);
+        redisService.delete(attemptKey);
     }
 
     private String generateRandomOtp(int length) {
@@ -171,33 +161,24 @@ public class OtpServiceImpl implements OtpService {
 
     private boolean isAttemptAllowed(String attemptKey) {
         try {
-            String attempts = redisTemplate.opsForValue().get(attemptKey);
+            String attempts = (String) redisService.get(attemptKey);
             if (attempts == null) {
                 return true;
             }
             return Integer.parseInt(attempts) < MAX_VERIFICATION_ATTEMPTS;
         } catch (Exception e) {
-            return true; // Fail open
+            return true;
         }
     }
 
     private void incrementAttempt(String attemptKey) {
         try {
-            Long count = redisTemplate.opsForValue().increment(attemptKey);
+            Long count = redisService.increment(attemptKey);
             if (count != null && count == 1) {
-                // Set expiration on first attempt (15 minutes)
-                redisTemplate.expire(attemptKey, 15, TimeUnit.MINUTES);
+                redisService.expire(attemptKey, Duration.ofMinutes(15));
             }
         } catch (Exception e) {
             log.error("Error incrementing OTP attempt counter", e);
         }
-    }
-
-    private String buildOtpKey(String identifier) {
-        return String.format("otp:%s", identifier);
-    }
-
-    private String buildAttemptKey(String identifier) {
-        return String.format("otp:attempts:%s", identifier);
     }
 }

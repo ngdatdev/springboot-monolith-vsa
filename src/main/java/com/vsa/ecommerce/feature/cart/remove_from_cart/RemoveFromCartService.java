@@ -7,8 +7,6 @@ import com.vsa.ecommerce.common.security.SecurityUtils;
 import com.vsa.ecommerce.domain.entity.Cart;
 import com.vsa.ecommerce.domain.entity.CartItem;
 import com.vsa.ecommerce.domain.enums.CartStatus;
-import com.vsa.ecommerce.feature.cart.dto.CartDto;
-import com.vsa.ecommerce.feature.cart.dto.CartItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +15,13 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class RemoveFromCartService implements IService<RemoveFromCartRequest, CartDto> {
+public class RemoveFromCartService implements IService<RemoveFromCartRequest, RemoveFromCartResponse> {
 
     private final RemoveFromCartRepository repository;
 
     @Override
     @Transactional
-    public CartDto execute(RemoveFromCartRequest request) {
+    public RemoveFromCartResponse execute(RemoveFromCartRequest request) {
         Long userId = SecurityUtils.getCurrentUserId()
                 .orElseThrow(() -> new BusinessException(BusinessStatus.UNAUTHORIZED));
 
@@ -41,20 +39,20 @@ public class RemoveFromCartService implements IService<RemoveFromCartRequest, Ca
         cart.recalculateTotal();
         Cart savedCart = repository.save(cart);
 
-        return mapToDto(savedCart);
+        return mapToResponse(savedCart);
     }
 
-    private CartDto mapToDto(Cart cart) {
-        return CartDto.builder()
+    private RemoveFromCartResponse mapToResponse(Cart cart) {
+        return RemoveFromCartResponse.builder()
                 .id(cart.getId())
                 .totalAmount(cart.getTotalAmount())
                 .status(cart.getStatus())
-                .items(cart.getItems().stream().map(this::mapItemToDto).collect(Collectors.toList()))
+                .items(cart.getItems().stream().map(this::mapItemToResponse).collect(Collectors.toList()))
                 .build();
     }
 
-    private CartItemDto mapItemToDto(CartItem item) {
-        return CartItemDto.builder()
+    private RemoveFromCartResponse.CartItemInfo mapItemToResponse(CartItem item) {
+        return RemoveFromCartResponse.CartItemInfo.builder()
                 .id(item.getId())
                 .productId(item.getProduct().getId())
                 .productName(item.getProduct().getName())

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vsa.ecommerce.common.abstraction.BaseController;
 import com.vsa.ecommerce.common.ratelimit.RateLimit;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
@@ -27,6 +28,7 @@ public class LoginController extends BaseController {
     private final LoginService loginService;
 
     @RateLimit(maxRequests = 5)
+    @Operation(summary = "Login", description = "Login with email and password")
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> handle(@Valid @RequestBody LoginRequest request) {
         LoginResponse response = loginService.execute(request);

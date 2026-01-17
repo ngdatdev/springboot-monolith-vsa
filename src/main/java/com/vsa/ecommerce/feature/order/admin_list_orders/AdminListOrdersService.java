@@ -2,8 +2,6 @@ package com.vsa.ecommerce.feature.order.admin_list_orders;
 
 import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Order;
-import com.vsa.ecommerce.feature.order.dto.OrderDto;
-import com.vsa.ecommerce.feature.order.dto.OrderItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,19 +22,19 @@ public class AdminListOrdersService implements IService<AdminListOrdersRequest, 
                 request.getSize());
         long total = adminListOrdersRepository.count(request.getStatus());
 
-        List<OrderDto> dtos = orders.stream().map(this::mapToDto).collect(Collectors.toList());
-        return AdminListOrdersResponse.builder().orders(dtos).totalElements(total).build();
+        List<AdminOrderItem> items = orders.stream().map(this::mapToItem).collect(Collectors.toList());
+        return AdminListOrdersResponse.builder().orders(items).totalElements(total).build();
     }
 
-    private OrderDto mapToDto(Order order) {
-        return OrderDto.builder()
+    private AdminOrderItem mapToItem(Order order) {
+        return AdminOrderItem.builder()
                 .id(order.getId())
                 .userId(order.getUser().getId())
                 .status(order.getStatus())
                 .totalAmount(order.getTotalAmount())
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
-                .items(order.getItems().stream().map(item -> OrderItemDto.builder()
+                .items(order.getItems().stream().map(item -> AdminOrderItem.AdminOrderItemDetail.builder()
                         .id(item.getId())
                         .productId(item.getProduct().getId())
                         .productName(item.getProductNameSnapshot())

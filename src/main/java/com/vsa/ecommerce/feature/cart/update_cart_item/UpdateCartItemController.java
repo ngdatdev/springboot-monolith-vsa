@@ -1,7 +1,6 @@
 package com.vsa.ecommerce.feature.cart.update_cart_item;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
-import com.vsa.ecommerce.feature.cart.dto.CartDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +22,7 @@ public class UpdateCartItemController extends BaseController {
 
     @PutMapping("/items/{itemId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<CartDto> updateCartItem(
+    public ResponseEntity<UpdateCartItemResponse> updateCartItem(
             @PathVariable Long itemId,
             @RequestBody @Valid UpdateCartItemRequest request) {
         request.setItemId(itemId);

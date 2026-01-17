@@ -8,6 +8,6 @@ import java.util.List;
 
 @Data
 @Builder
-public class OrderListResponse implements Response {
+public class GetOrderListResponse implements Response {
     private List<Order> orders;
 }

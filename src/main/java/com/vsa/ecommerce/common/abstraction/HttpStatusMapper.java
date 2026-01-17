@@ -49,6 +49,7 @@ public class HttpStatusMapper {
         STATUS_MAP.put(BusinessStatus.JSON_PARSE_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         STATUS_MAP.put(BusinessStatus.LOCK_FAILURE, HttpStatus.INTERNAL_SERVER_ERROR);
         STATUS_MAP.put(BusinessStatus.EXTERNAL_SERVICE_TIMEOUT, HttpStatus.GATEWAY_TIMEOUT);
+
     }
 
     public static HttpStatus mapToStatus(BusinessStatus status) {

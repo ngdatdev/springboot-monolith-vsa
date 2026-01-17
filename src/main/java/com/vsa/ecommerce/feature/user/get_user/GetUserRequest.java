@@ -1,13 +1,15 @@
-package com.vsa.ecommerce.feature.user.dto;
+package com.vsa.ecommerce.feature.user.get_user;
 
 import com.vsa.ecommerce.common.abstraction.Request;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
+@Builder
 @NoArgsConstructor
-public class UserIdRequest implements Request {
+@AllArgsConstructor
+public class GetUserRequest implements Request {
     private Long id;
 }

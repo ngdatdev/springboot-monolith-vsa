@@ -1,19 +1,22 @@
 package com.vsa.ecommerce.feature.user.update_user;
 
 import com.vsa.ecommerce.common.abstraction.IService;
+import com.vsa.ecommerce.common.redis.KeyConvention;
+import com.vsa.ecommerce.common.cache.hybrid.HybridCacheService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.User;
-import com.vsa.ecommerce.feature.user.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class UpdateUserService implements IService<UpdateUserService.Request, UserDto> {
+public class UpdateUserService implements IService<UpdateUserService.Request, UpdateUserResponse> {
 
     private final UpdateUserRepository updateUserRepository;
+    private final HybridCacheService cacheService;
+    private final KeyConvention keyConvention;
 
     @lombok.Data
     @lombok.Builder
@@ -24,7 +27,7 @@ public class UpdateUserService implements IService<UpdateUserService.Request, Us
 
     @Override
     @Transactional
-    public UserDto execute(Request request) {
+    public UpdateUserResponse execute(Request request) {
         User user = updateUserRepository.findById(request.getId())
                 .orElseThrow(() -> new BusinessException(BusinessStatus.USER_NOT_FOUND));
 
@@ -37,11 +40,15 @@ public class UpdateUserService implements IService<UpdateUserService.Request, Us
             user.setPhoneNumber(updateRequest.getPhoneNumber());
 
         updateUserRepository.save(user);
-        return mapToDto(user);
+
+        // Evict user cache
+        cacheService.evict(keyConvention.buildKey(KeyConvention.RESOURCE_USER, user.getId().toString()));
+
+        return mapToResponse(user);
     }
 
-    private UserDto mapToDto(User user) {
-        return UserDto.builder()
+    private UpdateUserResponse mapToResponse(User user) {
+        return UpdateUserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .firstName(user.getFirstName())

@@ -19,4 +19,9 @@ public interface OtpService {
      * Invalidate (remove) OTP for a key.
      */
     void invalidateOtp(String key);
+
+    /**
+     * Get remaining time to live for an OTP.
+     */
+    java.util.Optional<Long> getRemainingTtl(String key);
 }

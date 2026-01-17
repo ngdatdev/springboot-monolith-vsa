@@ -1,5 +1,6 @@
-package com.vsa.ecommerce.feature.cart.dto;
+package com.vsa.ecommerce.feature.product.get_product;
 
+import com.vsa.ecommerce.common.abstraction.Response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +12,10 @@ import java.math.BigDecimal;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CartItemDto {
+public class GetProductResponse implements Response {
     private Long id;
-    private Long productId;
-    private String productName;
-    private Integer quantity;
+    private String name;
+    private String description;
     private BigDecimal price;
-    private BigDecimal subtotal;
+    private String sku;
 }

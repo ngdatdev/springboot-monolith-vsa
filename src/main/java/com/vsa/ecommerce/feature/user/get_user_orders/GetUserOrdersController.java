@@ -20,8 +20,7 @@ public class GetUserOrdersController extends BaseController {
 
     @GetMapping("/{id}/orders")
     @PreAuthorize("hasRole('ADMIN') or @securityUtils.isCurrentUser(#id)")
-    public ResponseEntity<OrderListResponse> getUserOrders(@PathVariable Long id) {
-        return ResponseEntity
-                .ok(getUserOrdersService.execute(new com.vsa.ecommerce.feature.user.dto.UserIdRequest(id)));
+    public ResponseEntity<GetOrderListResponse> getUserOrders(@PathVariable Long id) {
+        return ResponseEntity.ok(getUserOrdersService.execute(new GetUserOrdersRequest(id)));
     }
 }

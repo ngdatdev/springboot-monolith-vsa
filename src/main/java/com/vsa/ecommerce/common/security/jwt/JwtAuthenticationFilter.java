@@ -34,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final UserDetailsService userDetailsService;
+    private final BlacklistService blacklistService;
 
     @Override
     protected void doFilterInternal(
@@ -46,6 +47,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String jwt = extractJwtFromRequest(request);
 
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
+
+                // Check if token is blacklisted in Redis
+                if (blacklistService.isBlacklisted(jwt)) {
+                    log.warn("Attempted access with blacklisted token");
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+
                 // Get user email from token
                 String email = jwtTokenProvider.getEmailFromToken(jwt);
 

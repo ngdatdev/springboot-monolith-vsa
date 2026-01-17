@@ -9,8 +9,6 @@ import com.vsa.ecommerce.domain.entity.CartItem;
 import com.vsa.ecommerce.domain.entity.Product;
 import com.vsa.ecommerce.domain.entity.User;
 import com.vsa.ecommerce.domain.enums.CartStatus;
-import com.vsa.ecommerce.feature.cart.dto.CartDto;
-import com.vsa.ecommerce.feature.cart.dto.CartItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +18,13 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class AddToCartService implements IService<AddToCartRequest, CartDto> {
+public class AddToCartService implements IService<AddToCartRequest, AddToCartResponse> {
 
     private final AddToCartRepository repository;
 
     @Override
     @Transactional
-    public CartDto execute(AddToCartRequest request) {
+    public AddToCartResponse execute(AddToCartRequest request) {
         Long userId = SecurityUtils.getCurrentUserId()
                 .orElseThrow(() -> new BusinessException(BusinessStatus.UNAUTHORIZED));
 
@@ -65,20 +63,20 @@ public class AddToCartService implements IService<AddToCartRequest, CartDto> {
         cart.recalculateTotal();
         Cart savedCart = repository.save(cart);
 
-        return mapToDto(savedCart);
+        return mapToResponse(savedCart);
     }
 
-    private CartDto mapToDto(Cart cart) {
-        return CartDto.builder()
+    private AddToCartResponse mapToResponse(Cart cart) {
+        return AddToCartResponse.builder()
                 .id(cart.getId())
                 .totalAmount(cart.getTotalAmount())
                 .status(cart.getStatus())
-                .items(cart.getItems().stream().map(this::mapItemToDto).collect(Collectors.toList()))
+                .items(cart.getItems().stream().map(this::mapItemToResponse).collect(Collectors.toList()))
                 .build();
     }
 
-    private CartItemDto mapItemToDto(CartItem item) {
-        return CartItemDto.builder()
+    private AddToCartResponse.CartItemInfo mapItemToResponse(CartItem item) {
+        return AddToCartResponse.CartItemInfo.builder()
                 .id(item.getId())
                 .productId(item.getProduct().getId())
                 .productName(item.getProduct().getName())

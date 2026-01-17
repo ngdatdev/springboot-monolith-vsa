@@ -1,4 +1,4 @@
-package com.vsa.ecommerce.feature.order.dto;
+package com.vsa.ecommerce.feature.order.get_order;
 
 import com.vsa.ecommerce.common.abstraction.Response;
 import com.vsa.ecommerce.domain.enums.OrderStatus;
@@ -15,12 +15,25 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto implements Response {
+public class GetOrderResponse implements Response {
     private Long id;
     private Long userId;
     private OrderStatus status;
     private BigDecimal totalAmount;
-    private List<OrderItemDto> items;
+    private List<OrderItemInfo> items;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+
+    @Data
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class OrderItemInfo {
+        private Long id;
+        private Long productId;
+        private String productName;
+        private BigDecimal pricePerUnit;
+        private Integer quantity;
+        private BigDecimal totalPrice;
+    }
 }

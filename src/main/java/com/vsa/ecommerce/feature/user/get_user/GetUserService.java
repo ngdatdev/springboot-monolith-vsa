@@ -4,28 +4,26 @@ import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.common.exception.BusinessException;
 import com.vsa.ecommerce.common.exception.BusinessStatus;
 import com.vsa.ecommerce.domain.entity.User;
-import com.vsa.ecommerce.feature.user.dto.UserDto;
-import com.vsa.ecommerce.feature.user.dto.UserIdRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-public class GetUserService implements IService<UserIdRequest, UserDto> {
+public class GetUserService implements IService<GetUserRequest, GetUserResponse> {
 
     private final GetUserRepository getUserRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public UserDto execute(UserIdRequest request) {
+    public GetUserResponse execute(GetUserRequest request) {
         User user = getUserRepository.findById(request.getId())
                 .orElseThrow(() -> new BusinessException(BusinessStatus.USER_NOT_FOUND));
-        return mapToDto(user);
+        return mapToResponse(user);
     }
 
-    private UserDto mapToDto(User user) {
-        return UserDto.builder()
+    private GetUserResponse mapToResponse(User user) {
+        return GetUserResponse.builder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .firstName(user.getFirstName())

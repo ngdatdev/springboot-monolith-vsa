@@ -1,7 +1,6 @@
 package com.vsa.ecommerce.feature.cart.remove_from_cart;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
-import com.vsa.ecommerce.feature.cart.dto.CartDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class RemoveFromCartController extends BaseController {
 
     @DeleteMapping("/items/{itemId}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<CartDto> removeFromCart(@PathVariable Long itemId) {
+    public ResponseEntity<RemoveFromCartResponse> removeFromCart(@PathVariable Long itemId) {
         return ResponseEntity.ok(service.execute(RemoveFromCartRequest.builder().itemId(itemId).build()));
     }
 }

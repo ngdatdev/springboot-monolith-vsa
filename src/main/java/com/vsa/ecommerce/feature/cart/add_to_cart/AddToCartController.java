@@ -1,7 +1,6 @@
 package com.vsa.ecommerce.feature.cart.add_to_cart;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
-import com.vsa.ecommerce.feature.cart.dto.CartDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,7 @@ public class AddToCartController extends BaseController {
 
     @PostMapping("/items")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<CartDto> addToCart(@RequestBody @Valid AddToCartRequest request) {
+    public ResponseEntity<AddToCartResponse> addToCart(@RequestBody @Valid AddToCartRequest request) {
         return ResponseEntity.ok(service.execute(request));
     }
 }

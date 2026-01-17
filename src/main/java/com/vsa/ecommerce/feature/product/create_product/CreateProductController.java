@@ -1,7 +1,6 @@
 package com.vsa.ecommerce.feature.product.create_product;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
-import com.vsa.ecommerce.feature.product.dto.ProductDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class CreateProductController extends BaseController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDto> createProduct(@RequestBody CreateProductRequest request) {
+    public ResponseEntity<CreateProductResponse> createProduct(@RequestBody CreateProductRequest request) {
         return ResponseEntity.ok(service.execute(request));
     }
 }

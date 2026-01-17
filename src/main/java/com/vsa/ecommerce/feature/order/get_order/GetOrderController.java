@@ -1,7 +1,6 @@
 package com.vsa.ecommerce.feature.order.get_order;
 
 import com.vsa.ecommerce.common.abstraction.BaseController;
-import com.vsa.ecommerce.feature.order.dto.OrderDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +20,7 @@ public class GetOrderController extends BaseController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<OrderDto> getOrder(@PathVariable Long id) {
+    public ResponseEntity<GetOrderResponse> getOrder(@PathVariable Long id) {
         return ResponseEntity.ok(getOrderService.execute(new GetOrderRequest(id)));
     }
 }

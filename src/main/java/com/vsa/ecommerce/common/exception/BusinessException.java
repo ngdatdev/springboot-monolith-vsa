@@ -19,5 +19,4 @@ public class BusinessException extends RuntimeException {
         super(String.format(status.getMessage(), args));
         this.status = status;
     }
-
 }

@@ -7,8 +7,6 @@ import com.vsa.ecommerce.common.security.SecurityUtils;
 import com.vsa.ecommerce.domain.entity.Cart;
 import com.vsa.ecommerce.domain.entity.CartItem;
 import com.vsa.ecommerce.domain.enums.CartStatus;
-import com.vsa.ecommerce.feature.cart.dto.CartDto;
-import com.vsa.ecommerce.feature.cart.dto.CartItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,13 +15,13 @@ import java.util.stream.Collectors;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
-public class UpdateCartItemService implements IService<UpdateCartItemRequest, CartDto> {
+public class UpdateCartItemService implements IService<UpdateCartItemRequest, UpdateCartItemResponse> {
 
     private final UpdateCartItemRepository repository;
 
     @Override
     @Transactional
-    public CartDto execute(UpdateCartItemRequest request) {
+    public UpdateCartItemResponse execute(UpdateCartItemRequest request) {
         Long userId = SecurityUtils.getCurrentUserId()
                 .orElseThrow(() -> new BusinessException(BusinessStatus.UNAUTHORIZED));
 
@@ -41,20 +39,20 @@ public class UpdateCartItemService implements IService<UpdateCartItemRequest, Ca
         cart.recalculateTotal();
         Cart savedCart = repository.save(cart);
 
-        return mapToDto(savedCart);
+        return mapToResponse(savedCart);
     }
 
-    private CartDto mapToDto(Cart cart) {
-        return CartDto.builder()
+    private UpdateCartItemResponse mapToResponse(Cart cart) {
+        return UpdateCartItemResponse.builder()
                 .id(cart.getId())
                 .totalAmount(cart.getTotalAmount())
                 .status(cart.getStatus())
-                .items(cart.getItems().stream().map(this::mapItemToDto).collect(Collectors.toList()))
+                .items(cart.getItems().stream().map(this::mapItemToResponse).collect(Collectors.toList()))
                 .build();
     }
 
-    private CartItemDto mapItemToDto(CartItem item) {
-        return CartItemDto.builder()
+    private UpdateCartItemResponse.CartItemInfo mapItemToResponse(CartItem item) {
+        return UpdateCartItemResponse.CartItemInfo.builder()
                 .id(item.getId())
                 .productId(item.getProduct().getId())
                 .productName(item.getProduct().getName())

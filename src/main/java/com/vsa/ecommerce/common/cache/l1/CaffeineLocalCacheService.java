@@ -37,8 +37,8 @@ public class CaffeineLocalCacheService implements LocalCacheService {
 
     public CaffeineLocalCacheService(
             ObjectMapper objectMapper,
-            @Value("${cache.caffeine.ttl-seconds:30}") int ttlSeconds,
-            @Value("${cache.caffeine.max-size:1000}") int maxSize) {
+            @Value("${cache.caffeine.ttl-seconds:300}") int ttlSeconds,
+            @Value("${cache.caffeine.max-size:10000}") int maxSize) {
         this.objectMapper = objectMapper;
         this.cache = Caffeine.newBuilder()
                 .expireAfterWrite(ttlSeconds, TimeUnit.SECONDS)
@@ -99,6 +99,16 @@ public class CaffeineLocalCacheService implements LocalCacheService {
 
         cache.invalidate(key);
         log.debug("L1 Cache EVICT: {}", key);
+    }
+
+    @Override
+    public void evictPattern(String pattern) {
+        if (pattern == null || pattern.isBlank()) {
+            return;
+        }
+
+        cache.invalidate(pattern);
+        log.debug("L1 Cache EVICT PATTERN: {}", pattern);
     }
 
     @Override

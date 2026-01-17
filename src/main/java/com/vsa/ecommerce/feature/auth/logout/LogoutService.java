@@ -2,28 +2,33 @@ package com.vsa.ecommerce.feature.auth.logout;
 
 import com.vsa.ecommerce.common.abstraction.EmptyResponse;
 import com.vsa.ecommerce.common.abstraction.IService;
-import com.vsa.ecommerce.domain.entity.TokenBlacklist;
+import com.vsa.ecommerce.common.security.jwt.BlacklistService;
+import com.vsa.ecommerce.common.security.jwt.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Component
 @RequiredArgsConstructor
 public class LogoutService implements IService<LogoutRequest, EmptyResponse> {
 
-    private final LogoutRepository repository;
+    private final BlacklistService blacklistService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
-    @Transactional
     public EmptyResponse execute(LogoutRequest request) {
-        TokenBlacklist blacklist = new TokenBlacklist();
-        blacklist.setToken(request.getToken());
-        // Expiry should ideally be parsed from token, but for now we set it to tomorrow
-        blacklist.setExpiryDate(LocalDateTime.now().plusDays(1));
+        String token = request.getToken();
 
-        repository.save(blacklist);
+        try {
+            // Get actual expiration date from token
+            Date expiration = jwtTokenProvider.getExpirationDate(token);
+            blacklistService.blacklistToken(token, expiration);
+        } catch (Exception e) {
+            // If token is already invalid/expired, we don't need to blacklist it
+            // But we can still log it or just ignore
+        }
+
         return new EmptyResponse();
     }
 }

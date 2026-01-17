@@ -1,53 +1,35 @@
 package com.vsa.ecommerce.common.ratelimit;
 
+import com.vsa.ecommerce.common.redis.KeyConvention;
+import com.vsa.ecommerce.common.redis.BaseRedisService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Redis-based rate limiting service using sliding window algorithm.
- * <p>
- * Use Cases:
- * - API rate limiting (e.g., 100 requests per minute per user)
- * - Login attempt limiting (e.g., 5 failed attempts per 15 minutes)
- * - Email sending limiting (e.g., 10 emails per hour)
- * - Resource access throttling
- * <p>
- * Algorithm: Sliding Window Counter
- * - More accurate than fixed window
- * - Lower memory footprint than sliding log
  */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RateLimitingService {
 
-    private final RedisTemplate<String, String> redisTemplate;
+    private final BaseRedisService redisService;
+    private final KeyConvention keyConvention;
 
-    /**
-     * Check if request is allowed based on rate limit.
-     * Increments counter if allowed.
-     *
-     * @param identifier  Unique identifier (e.g., user ID, IP address)
-     * @param maxRequests Maximum number of requests allowed
-     * @param window      Time window duration
-     * @return true if request is allowed, false if rate limit exceeded
-     */
     public boolean allowRequest(String identifier, int maxRequests, Duration window) {
         if (identifier == null || identifier.isBlank()) {
             log.warn("Rate limiting identifier cannot be null or empty");
             return false;
         }
 
-        String key = buildRateLimitKey(identifier);
+        String key = keyConvention.buildKey(KeyConvention.RESOURCE_RATE_LIMIT, identifier);
 
         try {
             // Increment counter
-            Long currentCount = redisTemplate.opsForValue().increment(key);
+            Long currentCount = redisService.increment(key);
 
             if (currentCount == null) {
                 log.error("Failed to increment rate limit counter for: {}", identifier);
@@ -56,7 +38,7 @@ public class RateLimitingService {
 
             // Set expiration on first request
             if (currentCount == 1) {
-                redisTemplate.expire(key, window.getSeconds(), TimeUnit.SECONDS);
+                redisService.expire(key, window);
             }
 
             boolean allowed = currentCount <= maxRequests;
@@ -88,10 +70,10 @@ public class RateLimitingService {
             return maxRequests;
         }
 
-        String key = buildRateLimitKey(identifier);
+        String key = keyConvention.buildKey(KeyConvention.RESOURCE_RATE_LIMIT, identifier);
 
         try {
-            String value = redisTemplate.opsForValue().get(key);
+            String value = (String) redisService.get(key);
             if (value == null) {
                 return maxRequests;
             }
@@ -115,12 +97,8 @@ public class RateLimitingService {
             return;
         }
 
-        String key = buildRateLimitKey(identifier);
-        redisTemplate.delete(key);
+        String key = keyConvention.buildKey(KeyConvention.RESOURCE_RATE_LIMIT, identifier);
+        redisService.delete(key);
         log.info("Rate limit reset for: {}", identifier);
-    }
-
-    private String buildRateLimitKey(String identifier) {
-        return String.format("rate-limit:%s", identifier);
     }
 }

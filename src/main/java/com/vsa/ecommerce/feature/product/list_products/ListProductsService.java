@@ -2,7 +2,6 @@ package com.vsa.ecommerce.feature.product.list_products;
 
 import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Product;
-import com.vsa.ecommerce.feature.product.dto.ProductDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,12 +21,12 @@ public class ListProductsService implements IService<ListProductsRequest, ListPr
         List<Product> products = repository.findAll(request.getSearch(), request.getPage(), request.getSize());
         long total = repository.count(request.getSearch());
 
-        List<ProductDto> dtos = products.stream().map(this::mapToDto).collect(Collectors.toList());
-        return ListProductsResponse.builder().products(dtos).totalElements(total).build();
+        List<ProductItem> items = products.stream().map(this::mapToItem).collect(Collectors.toList());
+        return ListProductsResponse.builder().products(items).totalElements(total).build();
     }
 
-    private ProductDto mapToDto(Product product) {
-        return ProductDto.builder()
+    private ProductItem mapToItem(Product product) {
+        return ProductItem.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .description(product.getDescription())

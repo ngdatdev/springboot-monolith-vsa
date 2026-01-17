@@ -100,13 +100,11 @@ management:
 
 # Custom Cache Configuration
 cache:
-  default-namespace: vsa
-  default-version: v1
   caffeine:
-    max-size: 1000
-    ttl-seconds: 30
+    max-size: 10000
+    ttl-seconds: 300
   redis:
-    ttl-minutes: 5
+    ttl-minutes: 30
   pub-sub:
     channel: cache-invalidation
   locks:

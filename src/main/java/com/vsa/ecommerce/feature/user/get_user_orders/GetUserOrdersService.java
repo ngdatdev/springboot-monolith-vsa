@@ -2,7 +2,6 @@ package com.vsa.ecommerce.feature.user.get_user_orders;
 
 import com.vsa.ecommerce.common.abstraction.IService;
 import com.vsa.ecommerce.domain.entity.Order;
-import com.vsa.ecommerce.feature.user.dto.UserIdRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,14 +10,14 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class GetUserOrdersService implements IService<UserIdRequest, OrderListResponse> {
+public class GetUserOrdersService implements IService<GetUserOrdersRequest, GetOrderListResponse> {
 
     private final GetUserOrdersRepository getUserOrdersRepository;
 
     @Override
     @Transactional(readOnly = true)
-    public OrderListResponse execute(UserIdRequest request) {
-        List<Order> orders = getUserOrdersRepository.findOrdersByUserId(request.getId());
-        return OrderListResponse.builder().orders(orders).build();
+    public GetOrderListResponse execute(GetUserOrdersRequest request) {
+        List<Order> orders = getUserOrdersRepository.findOrdersByUserId(request.getUserId());
+        return GetOrderListResponse.builder().orders(orders).build();
     }
 }
